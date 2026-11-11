@@ -1,0 +1,198 @@
+/* App frame v2 — the phone-shaped chrome that never changes: contained 430px
+   body, fixed header, one scrolling screen area, fixed tabbar overlaying it.
+   Depends on tokens.css. Contains no component styling. */
+
+/* ---------- Contained frame ---------- */
+
+body{
+  max-width:430px;
+  margin:0 auto;
+  height:100dvh;
+  background:var(--bg);
+  overflow:hidden;                    /* only .app-main scrolls */
+  box-shadow:0 0 0 1px rgba(0,0,0,.06);
+}
+
+.app-shell{
+  position:relative;                  /* anchors the tabbar, sheet and toast */
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+/* ---------- Header (identical on every screen) ---------- */
+
+.app-header{
+  position:relative;
+  z-index:20;
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-4);
+  height:calc(var(--header-h) + var(--safe-top));
+  padding-top:var(--safe-top);
+  padding-right:var(--space-4);
+  padding-left:var(--space-4);
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+}
+
+.app-header__logo{
+  display:block;
+  height:24px;
+  width:auto;
+}
+
+.app-header__actions{
+  display:flex;
+  align-items:center;
+  gap:var(--space-1);
+  margin-right:-8px;                  /* optical alignment: icon edge meets the margin */
+}
+
+.app-header__bell{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  padding:0;
+  border:none;
+  border-radius:var(--radius-pill);
+  background:transparent;
+  color:var(--text);
+  cursor:pointer;
+  transition:background-color var(--transition);
+}
+
+.app-header__bell:active{background:var(--card-hover);}
+.app-header__bell svg{width:22px;height:22px;}
+
+/* unread marker: a single accent dot, no counter */
+.app-header__dot{
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:8px;
+  height:8px;
+  border:2px solid var(--card);
+  border-radius:var(--radius-pill);
+  background:var(--accent);
+}
+
+/* ---------- Screen area ---------- */
+
+.app-main{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;   /* momentum scroll on iOS */
+  overscroll-behavior-y:contain;
+  padding-bottom:calc(var(--bottom-nav-h) + var(--safe-bottom));
+}
+
+/* screens without chrome (login) don't reserve tabbar space */
+.app-main--bare{padding-bottom:calc(var(--space-8) + var(--safe-bottom));}
+
+/* ---------- Tabbar ---------- */
+
+.app-tabbar{
+  position:absolute;                  /* overlays .app-main, which reserves its height */
+  right:0;
+  bottom:0;
+  left:0;
+  z-index:20;
+  display:flex;
+  height:calc(var(--bottom-nav-h) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  background:var(--card);
+  border-top:1px solid var(--border);
+}
+
+.app-tabbar__item{
+  position:relative;
+  flex:1 1 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:var(--space-1);
+  min-width:0;
+  color:var(--text-secondary);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.01em;
+  transition:color var(--transition);
+}
+
+.app-tabbar__item svg{width:22px;height:22px;}
+
+/* the glyph anchors the padlock badge of a locked tab */
+.app-tabbar__glyph{position:relative;display:flex;}
+
+/* locked tab: dimmed and padlocked. It still opens its screen, which explains
+   what unlocks it — a dead tab would leave the user with no answer. */
+.app-tabbar__item--locked{opacity:.5;}
+
+.app-tabbar__lock{
+  position:absolute;
+  right:-4px;
+  bottom:-2px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:12px;
+  height:12px;
+  border-radius:var(--radius-pill);
+  background:var(--card);
+  color:var(--text-secondary);
+}
+
+.app-tabbar__lock svg{width:10px;height:10px;stroke-width:2.5;}
+
+/* animated active indicator: a 2px accent bar that grows from the item's centre */
+.app-tabbar__item::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:50%;
+  width:32px;
+  height:2px;
+  border-radius:0 0 var(--radius-pill) var(--radius-pill);
+  background:var(--accent);
+  transform:translateX(-50%) scaleX(0);
+  transition:transform .25s ease;
+}
+
+.app-tabbar__item.active,
+.app-tabbar__item[aria-current="page"]{color:var(--accent);}
+
+.app-tabbar__item.active::after,
+.app-tabbar__item[aria-current="page"]::after{transform:translateX(-50%) scaleX(1);}
+
+@media (prefers-reduced-motion:reduce){
+  .app-tabbar__item::after{transition:none;}
+}
+
+/* ---------- Safe-area utilities ---------- */
+
+.safe-top{padding-top:var(--safe-top);}
+.safe-bottom{padding-bottom:var(--safe-bottom);}
+
+/* ---------- Turbo navigation ---------- */
+
+@media (prefers-reduced-motion:no-preference){
+  html.turbo-loading .app-main{
+    opacity:.6;
+    transition:opacity .12s ease;
+  }
+  .app-main{transition:opacity .12s ease;}
+}
+
+.turbo-progress-bar{background:var(--accent);height:2px;}
+
+/* the chat owns its own scrolling: the thread moves, the composer does not */
+.app-main--fixed{overflow:hidden;}

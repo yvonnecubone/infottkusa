@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel · Wallet</title>
+<style>
+  :root{ --bg:#0c0d10; --card:#15171c; --line:#23262e; --txt:#e9eaee; --dim:#9aa0ac; --accent:#f52a52; --ok:#22c55e; --warn:#f59e0b; --err:#ef4444; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  header{position:sticky;top:0;background:rgba(12,13,16,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:14px 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  h1{font-size:16px;margin:0;font-weight:700;letter-spacing:-.01em}
+  .muted{color:var(--dim)}
+  .wrap{padding:18px;max-width:1200px;margin:0 auto}
+  .gate{max-width:340px;margin:14vh auto;padding:26px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+  .gate h1{margin-bottom:14px}
+  input,button{font:inherit}
+  input{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:#0e1014;color:var(--txt);outline:none}
+  input:focus{border-color:var(--accent)}
+  button{cursor:pointer;border:none;border-radius:10px;padding:11px 16px;background:var(--accent);color:#fff;font-weight:600}
+  button.ghost{background:#1c1f26;color:var(--txt);border:1px solid var(--line)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .stat .n{font-size:22px;font-weight:700}
+  .stat .l{color:var(--dim);font-size:12px;margin-top:2px}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+  table{border-collapse:collapse;width:100%;min-width:780px;font-variant-numeric:tabular-nums}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.03em;position:sticky;top:0;background:var(--card)}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#1a1d23}
+  .pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600}
+  .p-processing{background:rgba(59,130,246,.16);color:#93c5fd}
+  .p-surge{background:rgba(245,158,11,.16);color:#fbbf24}
+  .p-error{background:rgba(239,68,68,.16);color:#fca5a5}
+  .p-refunding{background:rgba(34,197,94,.16);color:#86efac}
+  .p-need_docs{background:#20242c;color:var(--dim)}
+  .err{color:var(--err)}
+  .foot{color:var(--dim);font-size:12px;margin-top:12px}
+  a{color:#93c5fd}
+</style>
+</head>
+<body>
+<div id="gate" class="gate" hidden>
+  <h1>Painel · Wallet</h1>
+  <p class="muted" style="margin-top:0">Digite a senha do painel.</p>
+  <input id="pw" type="password" placeholder="Senha" autocomplete="current-password">
+  <button style="width:100%;margin-top:12px" onclick="entrar()">Entrar</button>
+  <p id="gateErr" class="err" style="min-height:16px;margin:8px 0 0"></p>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <h1>Painel · Wallet</h1>
+    <span class="muted" id="stamp"></span>
+    <span style="flex:1"></span>
+    <label class="muted" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="auto" style="width:auto" checked> auto 30s</label>
+    <button class="ghost" onclick="carregar()">Atualizar</button>
+    <button class="ghost" onclick="sair()">Sair</button>
+  </header>
+  <div class="wrap">
+    <div class="cards" id="stats"></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th>Email</th><th>Nome</th><th>Fase</th><th>Ciclos</th><th>Docs</th>
+          <th>Prazo (dias)</th><th>Vence</th><th>Eventos</th><th>1º acesso</th><th>Atualizado</th><th>Fuso</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="foot" id="foot"></p>
+  </div>
+</div>
+
+<script>
+var KEY = sessionStorage.getItem('wallet_admin_key') || '';
+function fmt(ts){ if(!ts) return '—'; var d=new Date(ts); return d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
+
+function mostrarGate(msg){ document.getElementById('app').hidden=true; document.getElementById('gate').hidden=false; if(msg) document.getElementById('gateErr').textContent=msg; document.getElementById('pw').focus(); }
+function entrar(){ KEY=document.getElementById('pw').value.trim(); if(!KEY) return; sessionStorage.setItem('wallet_admin_key',KEY); carregar(true); }
+function sair(){ sessionStorage.removeItem('wallet_admin_key'); KEY=''; mostrarGate(''); }
+document.addEventListener('keydown',function(e){ if(e.key==='Enter' && !document.getElementById('gate').hidden) entrar(); });
+
+async function carregar(fromGate){
+  if(!KEY){ mostrarGate(''); return; }
+  try{
+    var r = await fetch('/api/leads?key='+encodeURIComponent(KEY),{cache:'no-store'});
+    if(r.status===401){ mostrarGate('Senha incorreta.'); return; }
+    if(!r.ok){ throw new Error('HTTP '+r.status); }
+    var d = await r.json();
+    document.getElementById('gate').hidden=true;
+    document.getElementById('app').hidden=false;
+    render(d);
+  }catch(e){
+    if(fromGate) mostrarGate('Erro ao carregar. Tente de novo.');
+    else document.getElementById('foot').innerHTML='<span class="err">Falha ao atualizar: '+esc(e.message)+'</span>';
+  }
+}
+
+function render(d){
+  var leads = d.leads||[], ev = d.eventsByEmail||{};
+  var porFase={}; leads.forEach(function(l){ porFase[l.phase]=(porFase[l.phase]||0)+1; });
+  var comDocs = leads.filter(function(l){ return (l.docs_sent||0)>0; }).length;
+  var st=[['Leads',leads.length],['Enviaram docs',comDocs],['Em análise',porFase.processing||0],['Congestionamento',porFase.surge||0],['Em erro/loop',(porFase.error||0)+(porFase.refunding||0)],['Sem docs',porFase.need_docs||0]];
+  document.getElementById('stats').innerHTML = st.map(function(s){ return '<div class="stat"><div class="n">'+s[1]+'</div><div class="l">'+s[0]+'</div></div>'; }).join('');
+  document.getElementById('rows').innerHTML = leads.map(function(l){
+    var e = ev[l.email]||{total:0};
+    var fase = l.phase||'—';
+    return '<tr>'+
+      '<td>'+esc(l.email)+'</td>'+
+      '<td>'+esc(l.name)+'</td>'+
+      '<td><span class="pill p-'+esc(fase)+'">'+esc(fase)+'</span></td>'+
+      '<td>'+(l.cycles!=null?l.cycles:'—')+'</td>'+
+      '<td>'+(l.docs_sent||0)+'</td>'+
+      '<td>'+(l.total_days!=null?l.total_days:'—')+'</td>'+
+      '<td>'+fmt(l.due_at)+'</td>'+
+      '<td>'+(e.total||0)+'</td>'+
+      '<td>'+fmt(l.first_seen)+'</td>'+
+      '<td>'+fmt(l.updated_at)+'</td>'+
+      '<td class="muted">'+esc(l.timezone||'—')+'</td>'+
+    '</tr>';
+  }).join('') || '<tr><td colspan="11" class="muted" style="text-align:center;padding:30px">Nenhum lead ainda.</td></tr>';
+  document.getElementById('stamp').textContent = 'atualizado '+new Date().toLocaleTimeString('pt-BR');
+  document.getElementById('foot').textContent = leads.length+' lead(s). Dados só-leitura, direto do Supabase.';
+}
+
+var timer=setInterval(function(){ if(document.getElementById('auto') && document.getElementById('auto').checked && !document.getElementById('app').hidden) carregar(); },30000);
+if(KEY) carregar(); else mostrarGate('');
+</script>
+</body>
+</html>

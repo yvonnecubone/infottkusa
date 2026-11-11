@@ -1,0 +1,2718 @@
+/* Components v2 — shell furniture (sheet, toast), buttons and the surface/list
+   primitives every screen reuses. Depends on tokens.css; never redefines a token.
+
+   Organised in sections so screen-level components can be appended without
+   touching what is already here:
+     SHELL UTILITIES · SHEET · TOAST · BUTTON · CARD · LIST · FIELD ·
+     EMPTY STATE · SECTION HEADING · MOTION · BALANCE CARD · ACTION ROW ·
+     NOTICE · TX ROW · BADGE · UPLOAD ZONE · SHEET MENU · PLACEHOLDER ·
+     LOGIN · HOME */
+
+[x-cloak]{display:none !important;}
+
+/* ============================================================
+   SHELL UTILITIES
+   ============================================================ */
+
+.screen{padding:var(--space-6) var(--space-4) var(--space-8);}
+.screen__title{font-size:24px;font-weight:700;letter-spacing:-.02em;}
+.screen__lead{margin-top:var(--space-2);color:var(--text-secondary);font-size:14px;}
+
+.stack > * + *{margin-top:var(--space-3);}
+.stack--loose > * + *{margin-top:var(--space-6);}
+
+/* ============================================================
+   SHEET — bottom sheet, controlled by the shell's `sheetOpen`
+   ============================================================ */
+
+.sheet{position:absolute;inset:0;z-index:40;}
+
+.sheet__backdrop{
+  position:absolute;
+  inset:0;
+  background:var(--scrim);
+  -webkit-backdrop-filter:blur(4px);
+  backdrop-filter:blur(4px);
+}
+
+.sheet__panel{
+  position:absolute;
+  right:0;
+  bottom:0;
+  left:0;
+  display:flex;
+  flex-direction:column;
+  max-height:90vh;
+  padding:var(--space-2) var(--space-4) calc(var(--space-6) + var(--safe-bottom));
+  border-radius:20px 20px 0 0;
+  background:var(--bg);
+  box-shadow:var(--shadow-sheet);
+}
+
+.sheet__panel--anim{transition:transform .3s cubic-bezier(.32,.72,0,1);}
+.sheet__panel--down{transform:translateY(100%);}
+
+@media (prefers-reduced-motion:reduce){
+  .sheet__panel--anim{transition:none;}
+  .sheet__panel--down{transform:none;}
+}
+
+/* grab handle — the swipe-down affordance */
+.sheet__grip{
+  width:36px;
+  height:4px;
+  margin:var(--space-2) auto var(--space-1);
+  border-radius:var(--radius-pill);
+  background:var(--border);
+}
+
+.sheet__head{
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-4);
+  min-height:48px;
+}
+
+.sheet__title{font-size:17px;font-weight:600;letter-spacing:-.01em;}
+
+.sheet__close{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:36px;
+  height:36px;
+  margin-right:-4px;
+  padding:0;
+  border:none;
+  border-radius:var(--radius-pill);
+  background:var(--card);
+  color:var(--text-secondary);
+  cursor:pointer;
+  transition:background-color var(--transition),color var(--transition);
+}
+
+.sheet__close:active{background:var(--card-hover);color:var(--text);}
+.sheet__close svg{width:18px;height:18px;}
+
+.sheet__body{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
+  padding-top:var(--space-2);
+}
+
+/* ============================================================
+   TOAST — dark pill, fired by window.toast(msg)
+   ============================================================ */
+
+.toast{
+  position:absolute;
+  bottom:calc(var(--bottom-nav-h) + var(--safe-bottom) + var(--space-4));
+  left:50%;
+  z-index:60;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  max-width:calc(100% - var(--space-6));
+  padding:13px 18px 13px 16px;
+  border-radius:15px;
+  background:rgba(21,23,29,.90);
+  -webkit-backdrop-filter:blur(16px) saturate(1.5);
+  backdrop-filter:blur(16px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.10);
+  color:#F4F5F7;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:-.01em;
+  line-height:1.35;
+  text-align:left;
+  box-shadow:0 12px 36px rgba(0,0,0,.36), 0 3px 10px rgba(0,0,0,.22);
+  opacity:0;
+  visibility:hidden;
+  transform:translate(-50%,16px) scale(.97);
+  transition:opacity .24s cubic-bezier(.32,.72,0,1),transform .32s cubic-bezier(.32,.72,0,1),visibility .24s;
+  pointer-events:none;
+}
+
+/* ícone contextual: um disco com check (padrão) ou alerta (data-kind="warn").
+   o shim marca data-kind conforme a mensagem; sem ele, mostra a confirmação. */
+.toast::before{
+  content:"";
+  flex:none;
+  width:22px;height:22px;
+  border-radius:50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-9'/%3E%3C/svg%3E") center/13px no-repeat,
+    linear-gradient(160deg,#2fbf6e,#1f9d57);
+  box-shadow:0 2px 6px rgba(31,157,87,.4);
+}
+.toast[data-kind="warn"]::before{
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 8v5'/%3E%3Cpath d='M12 17h.01'/%3E%3C/svg%3E") center/15px no-repeat,
+    linear-gradient(160deg,#f0a93a,#e0871a);
+  box-shadow:0 2px 6px rgba(224,135,26,.4);
+}
+
+.toast__text{flex:1;min-width:0;}
+
+.toast.is-visible{
+  opacity:1;
+  visibility:visible;
+  transform:translate(-50%,0) scale(1);
+}
+
+@media (prefers-reduced-motion:reduce){
+  .toast{transition:opacity var(--transition),visibility var(--transition);transform:translate(-50%,0) scale(1);}
+}
+
+/* ============================================================
+   BUTTON
+   ============================================================ */
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--space-2);
+  min-height:48px;
+  padding:0 var(--space-6);
+  border:1px solid transparent;
+  border-radius:var(--radius);
+  background:transparent;
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:.01em;
+  text-align:center;
+  cursor:pointer;
+  user-select:none;
+  transition:background-color var(--transition),border-color var(--transition),color var(--transition);
+}
+
+.btn svg{width:18px;height:18px;}
+
+.btn--full{display:flex;width:100%;}
+
+.btn--primary{
+  background:var(--accent);
+  color:var(--accent-fg);
+}
+
+.btn--primary:hover{background:var(--accent-hover);}
+.btn--primary:active{background:var(--accent-ink);}
+
+.btn--ghost{
+  border-color:var(--border);
+  background:var(--card);
+  color:var(--text);
+}
+
+.btn--ghost:active{background:var(--card-hover);}
+
+.btn:disabled,.btn[aria-disabled="true"]{
+  background:var(--border);
+  border-color:transparent;
+  color:var(--text-secondary);
+  cursor:default;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.card{
+  padding:var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+}
+
+.card--flat{border-color:transparent;background:var(--card);}
+.card--raised{border-color:transparent;box-shadow:var(--shadow-soft);}
+
+.card__label{color:var(--text-secondary);font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;}
+.card__value{margin-top:var(--space-1);font-size:32px;font-weight:700;letter-spacing:-.03em;}
+
+/* ============================================================
+   LIST
+   ============================================================ */
+
+.list{border-top:1px solid var(--border);}
+
+.list__row{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  min-height:64px;
+  padding:var(--space-3) 0;
+  border-bottom:1px solid var(--border);
+}
+
+.list__row:active{background:var(--card-hover);}
+
+.list__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:40px;
+  height:40px;
+  border-radius:var(--radius-pill);
+  background:var(--card);
+  color:var(--text);
+}
+
+.list__icon svg{width:18px;height:18px;}
+
+.list__body{flex:1 1 auto;min-width:0;}
+.list__title{font-size:15px;font-weight:500;}
+.list__meta{margin-top:2px;color:var(--text-secondary);font-size:13px;}
+
+.list__amount{flex:none;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;}
+.list__amount--in{color:var(--success);}
+.list__amount--out{color:var(--text);}
+
+/* ============================================================
+   FIELD
+   ============================================================ */
+
+.field{display:block;}
+.field__label{display:block;margin-bottom:var(--space-2);font-size:13px;font-weight:500;color:var(--text);}
+
+.field__input{
+  display:block;
+  width:100%;
+  min-height:48px;
+  padding:0 var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+  color:var(--text);
+  font-size:16px;
+  transition:border-color var(--transition);
+}
+
+.field__input::placeholder{color:var(--text-secondary);}
+.field__input:focus{border-color:var(--accent);}
+.field__error{margin-top:var(--space-2);color:var(--danger);font-size:13px;}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.empty{
+  padding:var(--space-8) var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+}
+
+.empty__title{font-size:15px;font-weight:600;}
+.empty__text{margin-top:var(--space-1);color:var(--text-secondary);font-size:14px;}
+
+/* ============================================================
+   SECTION HEADING
+   ============================================================ */
+
+.section__title{
+  margin-bottom:var(--space-2);
+  color:var(--text-secondary);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+/* ============================================================
+   MOTION — keyframes + the staggered-entry helper
+   Opt-in and motion-gated: with reduced motion the elements are
+   simply there, never mid-animation.
+   ============================================================ */
+
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  /* `--i` is the item index: 0.06s apart, set inline by the screen */
+  .enter{animation:slideUp .4s ease both;animation-delay:calc(var(--i,0) * .06s);}
+}
+
+/* off-screen text: carries a state that is otherwise only shape or colour */
+.sr-only{
+  position:absolute;
+  width:1px;
+  height:1px;
+  margin:-1px;
+  padding:0;
+  overflow:hidden;
+  clip-path:inset(50%);
+  white-space:nowrap;
+  border:0;
+}
+
+/* ============================================================
+   BALANCE CARD — the single skeuomorphic surface (CLAUDE.md).
+   Solid accent + three decorative layers: glare (laminate), texture
+   (plastic grain) and glow (cyan tint). Nothing else in the UI is
+   allowed a gradient, a coloured shadow or an inset.
+   ============================================================ */
+
+.balance-card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  aspect-ratio:1.586/1;                /* ISO/IEC 7810 ID-1 — a real card */
+  padding:20px 20px 16px;
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--accent);            /* SOLID, not a gradient */
+  color:#FFFFFF;
+  box-shadow:0 20px 40px rgba(245,42,82,.30),inset 0 0 10px rgba(0,0,0,.50);
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .balance-card{animation:slideUp .5s ease .05s both;}
+}
+
+/* --- decorative layers --- */
+
+.balance-card__glare,
+.balance-card__texture{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  border-radius:20px;
+  pointer-events:none;
+}
+
+.balance-card__glare{
+  background:linear-gradient(125deg,
+    rgba(255,255,255,.30) 0%,
+    rgba(255,255,255,.05) 30%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255,255,255,.10) 80%,
+    rgba(255,255,255,.20) 100%);
+}
+
+/* fractal noise as a data URI: no image file, no request, no build step */
+.balance-card__texture{
+  opacity:.2;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* cyan bloom off the top-right corner, bleeding outside the card box */
+.balance-card__glow{
+  position:absolute;
+  top:-80%;
+  right:-30%;
+  width:120%;
+  height:180%;
+  z-index:0;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 70% 30%,rgba(37,244,238,.06) 0%,transparent 60%);
+}
+
+/* --- content --- */
+
+.balance-card__amount,
+.balance-card__pan,
+.balance-card__holder,
+.balance-card__status{position:relative;z-index:1;}
+
+/* contactless + chip ride the vertical centre of the right edge, the way they
+   sit on a physical card — not in a header row */
+.balance-card__chips{
+  position:absolute;
+  top:50%;
+  right:20px;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:var(--space-2);
+  transform:translateY(-50%);
+}
+
+.balance-card__contactless{flex:none;opacity:.9;}
+.balance-card__chip{flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25));}
+
+.balance-card__label{
+  margin-bottom:-5px;
+  color:#FFFFFF;
+  font-size:15px;
+  font-weight:500;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+
+.balance-card__value{
+  font-size:35px;
+  font-weight:700;
+  letter-spacing:-.3px;
+  font-variant-numeric:tabular-nums;
+}
+
+/* cents ride smaller and lighter, the way a card statement prints them */
+.balance-card__value .bc-cents{font-size:18px;font-weight:600;letter-spacing:0;}
+
+.balance-card__currency{
+  margin-top:-8px;
+  color:#FFFFFF;
+  font-size:14px;
+}
+
+.balance-card__pan{
+  margin:6px 0;
+  color:rgba(255,255,255,.85);
+  font-family:"Courier New",Courier,monospace;
+  font-size:16px;
+  letter-spacing:3px;
+  white-space:nowrap;
+}
+
+.balance-card__holder{
+  margin:0 0 4px;
+  color:#FFFFFF;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  opacity:.95;
+}
+
+.balance-card__status{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+  color:#FFFFFF;
+  font-size:10px;
+}
+
+.balance-card__dot{
+  flex:none;
+  width:5px;
+  height:5px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.40);
+}
+
+/* ============================================================
+   ACTION ROW — four quick actions under the card
+   ============================================================ */
+
+.action-row{display:flex;gap:var(--space-2);}
+
+.action-row__hit{
+  flex:1 1 0;
+  min-width:0;
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  font:inherit;
+  color:inherit;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.action-row__hit .action-btn{
+  width:100%;
+  flex:none;
+  pointer-events:none; /* the outer button owns the click */
+}
+
+.action-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:var(--space-2);
+  flex:1 1 0;
+  min-width:0;
+  padding:0;
+  border:none;
+  background:transparent;
+  color:var(--text);
+  font-family:inherit;
+  cursor:pointer;
+}
+
+.action-btn__icon{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  border-radius:var(--radius-pill);
+  background:var(--card);
+  color:var(--accent);
+  transition:transform var(--transition),box-shadow var(--transition);
+}
+
+.action-btn__icon svg{width:20px;height:20px;}
+
+.action-btn:hover .action-btn__icon{transform:translateY(-1px);box-shadow:var(--shadow-soft);}
+.action-btn:active .action-btn__icon{transform:none;box-shadow:none;background:var(--card-hover);}
+
+.action-btn__label{
+  color:var(--text-secondary);
+  font-size:12px;
+  font-weight:500;
+}
+
+/* locked: dimmed tile + a lock pinned to the icon's top-right corner */
+.action-btn--locked{opacity:.55;cursor:pointer;}
+.action-btn--locked .action-btn__icon{color:var(--text-secondary);}
+
+.action-btn__badge{
+  position:absolute;
+  top:-1px;
+  right:-1px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:18px;
+  height:18px;
+  border-radius:var(--radius-pill);
+  background:var(--danger);
+  color:#FFFFFF;
+}
+
+/* Locked action gate — soft bottom sheet on Send / Receive / Cards / More */
+.lock-gate{
+  position:fixed;
+  inset:0;
+  z-index:80;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0 var(--space-3);
+  padding-bottom:calc(var(--bottom-nav-h) + var(--safe-bottom) + var(--space-3));
+  pointer-events:none;
+}
+.lock-gate[hidden]{display:none !important;}
+.lock-gate:not([hidden]){pointer-events:auto;}
+
+.lock-gate__backdrop{
+  position:absolute;
+  inset:0;
+  border:0;
+  margin:0;
+  padding:0;
+  background:rgba(15,15,20,.52);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  cursor:pointer;
+  opacity:0;
+}
+.lock-gate:not([hidden]) .lock-gate__backdrop{opacity:1;}
+
+.lock-gate__card{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:398px;
+  padding:var(--space-2) var(--space-5) var(--space-5);
+  border-radius:28px;
+  border:1px solid rgba(224,224,230,.9);
+  background:var(--card);
+  box-shadow:var(--shadow-sheet);
+  transform:translateY(18px) scale(.985);
+  opacity:0;
+}
+.lock-gate:not([hidden]) .lock-gate__card{
+  transform:translateY(0) scale(1);
+  opacity:1;
+}
+
+.lock-gate__handle{
+  width:36px;
+  height:4px;
+  margin:var(--space-2) auto var(--space-4);
+  border-radius:var(--radius-pill);
+  background:var(--border);
+}
+
+.lock-gate__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:48px;
+  height:48px;
+  margin:0 auto var(--space-3);
+  border-radius:var(--radius-pill);
+  background:var(--accent-weak);
+  color:var(--accent);
+  box-shadow:inset 0 0 0 1px rgba(245,42,82,.12);
+}
+.lock-gate__icon svg{width:22px;height:22px;}
+
+.lock-gate__kicker{
+  margin:0;
+  text-align:center;
+  color:var(--accent-ink);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.lock-gate__title{
+  margin:6px 0 var(--space-2);
+  text-align:center;
+  font-size:21px;
+  font-weight:700;
+  letter-spacing:-.03em;
+  line-height:1.2;
+  color:var(--text);
+}
+.lock-gate__lead{
+  margin:0 auto var(--space-4);
+  max-width:32em;
+  text-align:center;
+  color:var(--text-secondary);
+  font-size:14px;
+  line-height:1.5;
+}
+
+.lock-gate__step{
+  margin-bottom:var(--space-5);
+  padding:var(--space-3) var(--space-4);
+  border-radius:18px;
+  background:var(--accent-weak);
+  border:1px solid rgba(245,42,82,.14);
+}
+.lock-gate__step-kicker{
+  display:inline-flex;
+  align-items:center;
+  margin-bottom:6px;
+  padding:3px 8px;
+  border-radius:var(--radius-pill);
+  background:rgba(245,42,82,.12);
+  color:var(--accent-ink);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.lock-gate__step-label{
+  margin:0;
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:-.01em;
+  color:var(--text);
+}
+.lock-gate__step-detail{
+  margin:6px 0 0;
+  font-size:13px;
+  line-height:1.45;
+  color:var(--text-secondary);
+}
+.lock-gate__step-day{
+  margin:10px 0 0;
+  font-size:12px;
+  font-weight:600;
+  color:var(--accent-ink);
+}
+
+.lock-gate__actions{
+  display:flex;
+  flex-direction:column;
+  gap:var(--space-2);
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .lock-gate:not([hidden]) .lock-gate__backdrop{
+    animation:lockGateScrim .28s ease both;
+  }
+  .lock-gate:not([hidden]) .lock-gate__card{
+    animation:lockGateSheet .46s cubic-bezier(.22,1.15,.36,1) both;
+  }
+}
+
+@keyframes lockGateScrim{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+@keyframes lockGateSheet{
+  from{opacity:0;transform:translateY(28px) scale(.97);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .lock-gate__backdrop,
+  .lock-gate__card{
+    opacity:1;
+    transform:none;
+    animation:none !important;
+  }
+}
+
+.action-btn__badge svg{width:10px;height:10px;stroke-width:2.5;}
+
+/* ============================================================
+   ALERT BANNER — the tinted statement block of the reference wallet
+   ============================================================ */
+
+.alert-banner{
+  display:flex;
+  align-items:flex-start;
+  gap:var(--space-3);
+  padding:var(--space-3) var(--space-4);
+  border-radius:var(--radius-sm);
+}
+
+.alert-banner__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:20px;
+  height:20px;
+  margin-top:1px;
+}
+
+.alert-banner__icon svg{width:18px;height:18px;}
+
+.alert-banner__body{min-width:0;}
+
+.alert-banner__title{
+  display:block;
+  font-size:14px;
+  font-weight:600;
+}
+
+.alert-banner__text{
+  margin-top:2px;
+  color:var(--text-secondary);
+  font-size:13px;
+}
+
+/* icon keeps the bright hue, the title takes the darkened ink: same family,
+   but the words stay readable on a 10% tint */
+.alert-banner--success{background:rgba(22,199,132,.10);}
+.alert-banner--success .alert-banner__icon{color:var(--success);}
+.alert-banner--success .alert-banner__title{color:var(--success-ink);}
+
+.alert-banner--warning{background:rgba(217,119,6,.10);}
+.alert-banner--warning .alert-banner__icon{color:var(--warning);}
+.alert-banner--warning .alert-banner__title{color:var(--warning-ink);}
+
+.alert-banner--danger{background:rgba(220,38,38,.08);}
+.alert-banner--danger .alert-banner__icon{color:var(--danger);}
+.alert-banner--danger .alert-banner__title{color:var(--danger-ink);}
+
+/* ============================================================
+   TX ROW — one movement
+   ============================================================ */
+
+/* the list only draws the opening rule; each row closes itself */
+.tx-list{border-top:1px solid var(--border);}
+
+.tx-row{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  min-height:64px;
+  padding:var(--space-3) 0;
+  border-bottom:1px solid var(--border);
+}
+
+.tx-row:last-child{border-bottom:none;}
+
+.tx-row__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:36px;
+  height:36px;
+  border-radius:var(--radius-pill);
+  background:var(--card);
+  color:var(--text-secondary);
+}
+
+.tx-row__icon svg{width:16px;height:16px;}
+.tx-row__icon--in{color:var(--success);}
+.tx-row__icon--out{color:var(--text);}
+
+.tx-row__body{flex:1 1 auto;min-width:0;}
+
+.tx-row__title{
+  overflow:hidden;
+  font-size:15px;
+  font-weight:500;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.tx-row__meta{
+  margin-top:2px;
+  color:var(--text-secondary);
+  font-size:13px;
+}
+
+.tx-row__amount{
+  flex:none;
+  font-size:15px;
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+}
+
+.tx-row__amount--in{color:var(--success);}
+.tx-row__amount--accent{color:var(--accent);}
+.tx-row__amount--out{color:var(--text);}
+
+/* ============================================================
+   BADGE — tinted status pill, never a saturated fill
+   ============================================================ */
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--space-1);
+  padding:3px var(--space-2);
+  border-radius:var(--radius-pill);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+
+.badge--neutral{background:rgba(142,142,160,.14);color:var(--muted-ink);}
+.badge--success{background:rgba(22,199,132,.12);color:var(--success-ink);}
+.badge--warning{background:rgba(217,119,6,.10);color:var(--warning-ink);}
+.badge--danger{background:rgba(220,38,38,.10);color:var(--danger-ink);}
+
+/* ============================================================
+   UPLOAD ZONE — dashed while empty, solid green once filled
+   ============================================================ */
+
+.upload-zone{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  padding:var(--space-4);
+  border:1.5px dashed var(--border);
+  border-radius:var(--radius-sm);
+  background:var(--card);
+  cursor:pointer;
+  transition:border-color var(--transition),background-color var(--transition);
+}
+
+/* the real file input: invisible, but it is the whole hit area */
+.upload-zone__input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+}
+
+.upload-zone__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:36px;
+  height:36px;
+  border-radius:var(--radius-pill);
+  background:var(--bg);
+  color:var(--text-secondary);
+}
+
+.upload-zone__icon svg{width:18px;height:18px;}
+
+.upload-zone__body{flex:1 1 auto;min-width:0;}
+
+.upload-zone__title{
+  display:block;
+  font-size:14px;
+  font-weight:600;
+}
+
+.upload-zone__sub{
+  display:block;
+  margin-top:2px;
+  overflow:hidden;
+  color:var(--text-secondary);
+  font-size:13px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.upload-zone__action{
+  flex:none;
+  color:var(--accent);
+  font-size:13px;
+  font-weight:600;
+}
+
+.upload-zone--filled{
+  border-style:solid;
+  border-color:var(--success);
+  background:rgba(22,199,132,.08);
+}
+
+.upload-zone--filled .upload-zone__icon{
+  background:rgba(22,199,132,.15);
+  color:var(--success);
+}
+
+.upload-zone--filled .upload-zone__action{color:var(--success);}
+
+.upload-zone__sub--done{color:var(--success-ink);font-weight:500;}
+
+/* while the slot is being recorded: the zone is inert, not gone */
+.upload-zone--busy{border-style:solid;border-color:var(--accent);cursor:progress;}
+.upload-zone--busy .upload-zone__input{pointer-events:none;}
+
+.upload-zone__spinner{
+  width:18px;
+  height:18px;
+  border:2px solid rgba(245,42,82,.25);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:upload-spin .7s linear infinite;
+}
+
+@keyframes upload-spin{to{transform:rotate(360deg);}}
+
+@media (prefers-reduced-motion:reduce){
+  .upload-zone__spinner{animation-duration:2s;}
+}
+
+/* running tally under the zones — the resume point, stated plainly */
+.upload-form__count{
+  margin:var(--space-3) 0 var(--space-4);
+  color:var(--text-secondary);
+  font-size:13px;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ============================================================
+   UPLOAD DONE — the beat between submitting and the review screen
+   ============================================================ */
+
+.upload-done{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:var(--space-2);
+  padding:var(--space-8) 0 var(--space-10);
+}
+
+.upload-done__mark{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:48px;
+  height:48px;
+  margin-bottom:var(--space-2);
+  border-radius:var(--radius-pill);
+  background:rgba(22,199,132,.14);
+  color:var(--success);
+  animation:upload-done-in .32s ease-out both;
+}
+
+.upload-done__mark svg{width:26px;height:26px;}
+
+.upload-done__title{font-size:17px;font-weight:600;}
+.upload-done__text{color:var(--text-secondary);font-size:14px;}
+
+@keyframes upload-done-in{
+  from{opacity:0;transform:scale(.85);}
+  to{opacity:1;transform:scale(1);}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .upload-done__mark{animation:none;}
+}
+
+/* ============================================================
+   RECEIPT — what the account sent, and when
+   ============================================================ */
+
+.receipt{padding:0;}
+
+.receipt__row{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  padding:var(--space-4);
+  border-bottom:1px solid var(--border);
+}
+
+.receipt__row:last-child{border-bottom:none;}
+
+.receipt__mark{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:32px;
+  height:32px;
+  border-radius:var(--radius-pill);
+  background:var(--bg);
+  color:var(--text-secondary);
+}
+
+.receipt__mark svg{width:16px;height:16px;}
+
+.receipt__mark--done{background:rgba(22,199,132,.14);color:var(--success);}
+
+.receipt__body{flex:1 1 auto;min-width:0;}
+.receipt__title{font-size:14px;font-weight:600;}
+.receipt__meta{margin-top:2px;color:var(--text-secondary);font-size:12px;}
+
+.receipt__status{
+  flex:none;
+  color:var(--text-secondary);
+  font-size:12px;
+  font-weight:600;
+}
+
+.receipt__status--done{color:var(--success-ink);}
+
+/* a checklist row that is already handed in */
+.list__icon--done{background:rgba(22,199,132,.14);color:var(--success);}
+
+/* ============================================================
+   SHEET MENU — icon rows inside the bottom sheet
+   ============================================================ */
+
+.sheet-menu{display:flex;flex-direction:column;}
+
+.sheet-menu__item{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  width:100%;
+  min-height:56px;
+  padding:var(--space-2) 0;
+  border:none;
+  border-bottom:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  font-size:15px;
+  font-weight:500;
+  text-align:left;
+  cursor:pointer;
+}
+
+.sheet-menu__item:last-child{border-bottom:none;}
+
+.sheet-menu__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:36px;
+  height:36px;
+  border-radius:var(--radius-pill);
+  background:var(--card);
+  color:var(--text);
+}
+
+.sheet-menu__icon svg{width:18px;height:18px;}
+.sheet-menu__label{flex:1 1 auto;min-width:0;}
+.sheet-menu__item--danger,
+.sheet-menu__item--danger .sheet-menu__icon{color:var(--danger);}
+
+/* ============================================================
+   LOCKED STATE — a feature the account has not unlocked yet.
+   A padlock in the left gutter, the copy flush left beside it: this is
+   a closed door, not an empty list, so it never reads as "no items".
+   ============================================================ */
+
+.locked-state{
+  display:flex;
+  align-items:flex-start;
+  gap:var(--space-4);
+  padding:var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+}
+
+.locked-state__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:36px;
+  height:36px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  color:var(--text-secondary);
+}
+
+.locked-state__icon svg{width:17px;height:17px;stroke-width:1.75;}
+.locked-state__body{min-width:0;}
+.locked-state__title{font-size:15px;font-weight:600;letter-spacing:-.01em;}
+
+.locked-state__text{
+  max-width:42ch;
+  margin-top:var(--space-1);
+  color:var(--text-secondary);
+  font-size:13px;
+  line-height:1.5;
+}
+
+/* ============================================================
+   TOPIC BAR — Support's own bar under the app header: back + centred title,
+   then the topics as pills that scroll sideways. The selected pill is solid
+   black, the rest sit on a flat grey — same as the reference app.
+   ============================================================ */
+
+.topic-bar{
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+}
+
+.topic-bar__head{
+  position:relative;
+  display:flex;
+  align-items:center;
+  min-height:48px;
+  padding:0 var(--space-4);
+}
+
+.topic-bar__back{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:32px;
+  height:32px;
+  margin-left:calc(var(--space-2) * -1);
+  border:0;
+  border-radius:var(--radius-pill);
+  background:transparent;
+  color:var(--text);
+  cursor:pointer;
+}
+
+.topic-bar__back svg{width:24px;height:24px;stroke-width:2.5;}
+.topic-bar__back:active{background:var(--card-hover);}
+
+/* centred on the bar itself, not on what is left of it after the back button */
+.topic-bar__title{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:17px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  white-space:nowrap;
+}
+
+.topic-bar__chips{
+  display:flex;
+  gap:var(--space-2);
+  padding:var(--space-2) var(--space-4) var(--space-3);
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+
+.topic-bar__chips::-webkit-scrollbar{display:none;}
+
+.topic-chip{
+  flex:none;
+  padding:9px var(--space-4);
+  border:0;
+  border-radius:var(--radius-pill);
+  background:var(--card-hover);
+  color:var(--text-secondary);
+  font:inherit;
+  font-size:14px;
+  font-weight:500;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:background-color var(--transition),color var(--transition);
+}
+
+.topic-chip--active{
+  background:#000000;
+  color:#ffffff;
+  font-weight:600;
+}
+
+/* ============================================================
+   FAQ — accordion. Rows separated by a single rule; the answer opens
+   with a grid-template-rows 0fr→1fr transition (no fixed max-height).
+   ============================================================ */
+
+.faq{border-top:1px solid var(--border);}
+
+.faq__item{border-bottom:1px solid var(--border);}
+
+.faq__question{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:var(--space-4);
+  width:100%;
+  padding:var(--space-4) 0;
+  border:0;
+  background:transparent;
+  color:var(--text);
+  font:inherit;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:-.01em;
+  text-align:left;
+  cursor:pointer;
+}
+
+.faq__chevron{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:20px;
+  height:20px;
+  color:var(--text-secondary);
+  transition:transform var(--transition);
+}
+
+.faq__chevron svg{width:16px;height:16px;}
+.faq__item--open .faq__chevron{transform:rotate(180deg);}
+
+.faq__answer{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows .25s ease;
+}
+
+.faq__item--open .faq__answer{grid-template-rows:1fr;}
+
+.faq__answer > div{overflow:hidden;}
+
+.faq__text{
+  max-width:46ch;
+  padding-bottom:var(--space-4);
+  color:var(--text-secondary);
+  font-size:13px;
+  line-height:1.6;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .faq__answer{transition:none;}
+  .faq__chevron{transition:none;}
+}
+
+/* ============================================================
+   LOGIN v2 — centred mark, inline-icon field, full-width action
+   ============================================================ */
+
+.login{
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+  padding:var(--space-10) var(--space-5) var(--space-6);
+}
+
+.login__mark{
+  display:block;
+  width:auto;
+  height:32px;
+  margin:0 auto var(--space-8);
+}
+
+.login__title{font-size:26px;font-weight:700;letter-spacing:-.02em;}
+.login__lead{margin-top:var(--space-2);color:var(--text-secondary);font-size:14px;}
+.login__form{margin-top:var(--space-6);}
+.login__form .btn{margin-top:var(--space-5);}
+
+/* field with an icon sitting inside the input's left padding — the wrapper is
+   what the icon is positioned against, so the label above never shifts it */
+.field__control{position:relative;display:block;}
+
+.field--icon .field__input{padding-left:var(--space-12);}
+
+.field__icon{
+  position:absolute;
+  top:50%;
+  left:var(--space-4);
+  display:flex;
+  align-items:center;
+  color:var(--text-secondary);
+  transform:translateY(-50%);
+  pointer-events:none;
+}
+
+.field__icon svg{width:18px;height:18px;}
+.field--icon .field__input:focus ~ .field__icon{color:var(--accent);}
+
+.login__terms{
+  margin-top:auto;
+  padding-top:var(--space-8);
+  color:var(--text-secondary);
+  font-size:12px;
+  text-align:center;
+}
+
+/* ============================================================
+   HOME v2 — greeting line and section head
+   ============================================================ */
+
+.greeting{display:flex;align-items:center;gap:var(--space-3);}
+
+.greeting__avatar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:40px;
+  height:40px;
+  border-radius:var(--radius-pill);
+  background:var(--card);
+  color:var(--accent);
+  font-size:16px;
+  font-weight:700;
+}
+
+.greeting__hello{font-size:15px;font-weight:600;}
+.greeting__sub{color:var(--text-secondary);font-size:12px;}
+
+.section__head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:var(--space-4);
+  margin-bottom:var(--space-1);
+}
+
+/* ============================================================
+   UPLOAD FORM — the document sheet's body
+   ============================================================ */
+
+.upload-form__lead{
+  margin-bottom:var(--space-4);
+  color:var(--text-secondary);
+  font-size:13px;
+}
+
+.upload-form__zones{display:flex;flex-direction:column;gap:var(--space-3);}
+.upload-form .btn{margin-top:var(--space-5);}
+
+/* set by window.uploadsReady() on every empty zone when the form is submitted */
+.upload-zone--error{
+  border-style:solid;
+  border-color:var(--danger);
+  background:rgba(220,38,38,.06);
+}
+
+.upload-zone--error .upload-zone__icon{
+  background:rgba(220,38,38,.12);
+  color:var(--danger);
+}
+
+/* ============================================================
+   PROGRESS — day label + analysis bar
+   ============================================================ */
+
+/* the day is the headline; the percentage is a caption next to it, never a
+   dashboard-sized number */
+.progress{
+  padding:var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+}
+
+.progress__label{
+  display:block;
+  color:var(--text-secondary);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.progress__head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:var(--space-4);
+  margin:var(--space-2) 0 var(--space-3);
+}
+
+.progress__day{
+  font-size:19px;
+  font-weight:700;
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+}
+
+.progress__pct{color:var(--text-secondary);font-size:12px;font-weight:600;}
+
+.progress__track{
+  overflow:hidden;
+  height:4px;
+  border-radius:var(--radius-pill);
+  background:var(--border);
+}
+
+.progress__fill{
+  display:block;
+  height:100%;
+  min-width:4px;
+  border-radius:var(--radius-pill);
+  background:var(--accent);
+  transition:width .6s cubic-bezier(.32,.72,0,1);
+}
+
+.progress__note{
+  margin-top:var(--space-3);
+  color:var(--text-secondary);
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* ============================================================
+   TIMELINE — a real rail: one continuous line threading markers that
+   carry the STEP's own icon while the step is unsettled, and the
+   outcome glyph (check / lock) once it is.
+   ============================================================ */
+
+.timeline{display:flex;flex-direction:column;}
+
+.timeline__item{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  gap:var(--space-3);
+  padding:var(--space-3) 0;
+}
+
+/* the rail: one 2px line running edge to edge behind the markers; the first and
+   last rows cut it at the marker's centre (28px = 12px padding + 16px radius) so
+   the trail starts and ends on a marker instead of floating */
+.timeline__item::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:15px;
+  width:2px;
+  background:var(--border);
+}
+
+.timeline__item:first-child::before{top:28px;}
+.timeline__item:last-child::before{bottom:auto;height:28px;}
+
+/* walked segment reads greener than the road ahead */
+.timeline__item--completed::before{background:rgba(22,199,132,.30);}
+
+.timeline__marker{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:32px;
+  height:32px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-pill);
+  background:var(--card);
+  color:var(--text-secondary);
+}
+
+.timeline__marker svg{width:15px;height:15px;stroke-width:1.75;}
+
+/* both columns are nudged down so the first text line sits on the marker's
+   optical centre (32px marker, 20px label line) */
+.timeline__body{flex:1 1 auto;min-width:0;padding-top:6px;}
+
+.timeline__label{
+  display:block;
+  color:var(--text-secondary);
+  font-size:14px;
+}
+
+.timeline__detail{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  line-height:1.4;
+  color:var(--text-secondary);
+  opacity:.9;
+}
+
+.timeline__item--pending .timeline__detail{opacity:.7;}
+
+/* status word — quiet type, not a shouting pill */
+.timeline__status{
+  flex:none;
+  padding-top:8px;
+  color:var(--text-secondary);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.02em;
+}
+
+/* pending — the step's own icon, drawn faint: it says what is queued.
+   Dimming the whole marker fades icon and dashed ring together. */
+.timeline__item--pending .timeline__marker{
+  border-style:dashed;
+  color:var(--text-secondary);
+  opacity:.6;
+}
+
+.timeline__item--pending .timeline__status{color:var(--text-secondary);opacity:.8;}
+
+/* completed — solid success marker, label back to full contrast */
+.timeline__item--completed .timeline__marker{
+  border-color:var(--success);
+  background:var(--success);
+  color:var(--accent-fg);
+}
+
+.timeline__item--completed .timeline__marker svg{stroke-width:2.5;}
+.timeline__item--completed .timeline__label{color:var(--text);}
+.timeline__item--completed .timeline__status{color:var(--success-ink);}
+
+/* current — the step icon in accent inside a ring that breathes once a cycle */
+.timeline__item--current .timeline__marker{
+  border-color:var(--accent);
+  color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-weak);
+}
+
+.timeline__item--current .timeline__marker::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border:1px solid var(--accent);
+  border-radius:inherit;
+  opacity:0;
+}
+
+.timeline__item--current .timeline__label{color:var(--text);font-weight:600;}
+.timeline__item--current .timeline__status{color:var(--accent);}
+
+.timeline__bar{
+  display:block;
+  overflow:hidden;
+  width:100%;
+  max-width:120px;
+  height:2px;
+  margin-top:var(--space-2);
+  border-radius:var(--radius-pill);
+  background:var(--border);
+}
+
+.timeline__bar::after{
+  content:"";
+  display:block;
+  width:35%;
+  height:100%;
+  border-radius:var(--radius-pill);
+  background:var(--accent);
+}
+
+/* denied — terminal step, the only red row */
+.timeline__item--denied .timeline__marker{
+  border-color:var(--danger);
+  background:var(--danger);
+  color:var(--accent-fg);
+}
+
+.timeline__item--denied .timeline__label{color:var(--text);font-weight:600;}
+.timeline__item--denied .timeline__status{color:var(--danger-ink);}
+
+@keyframes timelineRing{
+  0%{opacity:.55;transform:scale(1);}
+  70%,100%{opacity:0;transform:scale(1.5);}
+}
+
+@keyframes timelineSlide{
+  0%{transform:translateX(-100%);}
+  100%{transform:translateX(285%);}
+}
+
+/* motion is opt-in: with reduced motion the current row is simply marked, the
+   bar sits still and the ring never fires */
+/* --- terminal (review history no estado final): a etapa acabou, então o
+   histórico ganha vida em loop — cada marcador se redesenha (contorno → preenche
+   → o ícone pulsa) e a linha percorrida flui, verde entre as concluídas e
+   vermelha ao chegar na decisão final. Só o estado terminal anima assim; durante
+   a análise apenas a etapa corrente tem efeito. --- */
+@keyframes tlMarkerDone{
+  0%{transform:scale(.82);background:var(--card);border-color:var(--success);box-shadow:0 0 0 0 rgba(22,199,132,0);}
+  22%{transform:scale(1.12);background:var(--success);border-color:var(--success);box-shadow:0 0 0 5px rgba(22,199,132,.20);}
+  38%{transform:scale(1);box-shadow:0 0 0 3px rgba(22,199,132,.14);}
+  100%{transform:scale(1);background:var(--success);border-color:var(--success);box-shadow:0 0 0 0 rgba(22,199,132,0);}
+}
+
+@keyframes tlMarkerDenied{
+  0%{transform:scale(.82);background:var(--card);border-color:var(--danger);box-shadow:0 0 0 0 rgba(220,38,38,0);}
+  22%{transform:scale(1.14);background:var(--danger);border-color:var(--danger);box-shadow:0 0 0 6px rgba(220,38,38,.22);}
+  38%{transform:scale(1);box-shadow:0 0 0 3px rgba(220,38,38,.16);}
+  100%{transform:scale(1);background:var(--danger);border-color:var(--danger);box-shadow:0 0 0 0 rgba(220,38,38,0);}
+}
+
+/* faixa clara viajando por dentro do trilho, de cima para baixo */
+@keyframes tlRail{
+  0%{background-position:0 -120%;}
+  100%{background-position:0 120%;}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .timeline__item--current .timeline__marker::after{
+    animation:timelineRing 2s ease-out infinite;
+  }
+
+  .timeline__bar::after{animation:timelineSlide 1.6s ease-in-out infinite;}
+
+  /* marcadores que se redesenham em loop */
+  .timeline--terminal .timeline__item--completed .timeline__marker{
+    animation:tlMarkerDone 3s ease-in-out infinite;
+  }
+
+  .timeline--terminal .timeline__item--denied .timeline__marker{
+    animation:tlMarkerDenied 3s ease-in-out infinite;
+  }
+
+  /* a linha percorrida flui: base tingida + faixa clara viajando */
+  .timeline--terminal .timeline__item--completed::before,
+  .timeline--terminal .timeline__item--denied::before{
+    background-repeat:no-repeat;
+    background-size:100% 240%;
+    animation:tlRail 2.4s linear infinite;
+  }
+
+  .timeline--terminal .timeline__item--completed::before{
+    background-image:linear-gradient(to bottom,transparent 0%,var(--success) 50%,transparent 100%);
+    background-color:rgba(22,199,132,.30);
+  }
+
+  /* a linha que chega na decisão final chega vermelha */
+  .timeline--terminal .timeline__item--denied::before{
+    background-image:linear-gradient(to bottom,transparent 0%,var(--danger) 50%,transparent 100%);
+    background-color:rgba(220,38,38,.28);
+  }
+
+  /* uma cascata só: o efeito desce etapa a etapa em vez de piscar tudo junto */
+  .timeline--terminal .timeline__item:nth-child(1) .timeline__marker,
+  .timeline--terminal .timeline__item:nth-child(1)::before{animation-delay:0s;}
+  .timeline--terminal .timeline__item:nth-child(2) .timeline__marker,
+  .timeline--terminal .timeline__item:nth-child(2)::before{animation-delay:.3s;}
+  .timeline--terminal .timeline__item:nth-child(3) .timeline__marker,
+  .timeline--terminal .timeline__item:nth-child(3)::before{animation-delay:.6s;}
+  .timeline--terminal .timeline__item:nth-child(4) .timeline__marker,
+  .timeline--terminal .timeline__item:nth-child(4)::before{animation-delay:.9s;}
+  .timeline--terminal .timeline__item:nth-child(5) .timeline__marker,
+  .timeline--terminal .timeline__item:nth-child(5)::before{animation-delay:1.2s;}
+  .timeline--terminal .timeline__item:nth-child(6) .timeline__marker,
+  .timeline--terminal .timeline__item:nth-child(6)::before{animation-delay:1.5s;}
+  .timeline--terminal .timeline__item:nth-child(7) .timeline__marker,
+  .timeline--terminal .timeline__item:nth-child(7)::before{animation-delay:1.8s;}
+  .timeline--terminal .timeline__item:nth-child(8) .timeline__marker,
+  .timeline--terminal .timeline__item:nth-child(8)::before{animation-delay:2.1s;}
+}
+
+/* ============================================================
+   SIMULATION TOOL — temporary day machine, deliberately quiet
+   ============================================================ */
+
+.sim-tool{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-3);
+}
+
+.sim-tool__button{
+  padding:var(--space-2) var(--space-3);
+  border:1px dashed var(--border);
+  border-radius:var(--radius-sm);
+  background:transparent;
+  color:var(--text-secondary);
+  font-size:12px;
+  cursor:pointer;
+}
+
+.sim-tool__button:active{background:var(--card-hover);}
+.sim-tool__hint{color:var(--text-secondary);font-size:11px;}
+
+/* ============================================================
+   LIVE CHAT — entry point on Support, then the conversation
+   ============================================================ */
+
+/* The contact button: a full-width accent pill with a solid bubble, exactly
+   the shape the reference app uses to hand the lead over to a person. */
+.contact-btn{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--space-3);
+  width:100%;
+  min-height:56px;
+  padding:0 var(--space-6);
+  border:0;
+  border-radius:var(--radius-pill);
+  background:var(--accent);
+  color:var(--accent-fg);
+  text-decoration:none;
+  transition:filter var(--transition);
+}
+
+.contact-btn:active{filter:brightness(.94);}
+
+.contact-btn__icon{display:flex;align-items:center;justify-content:center;flex:none;}
+.contact-btn__icon svg{width:26px;height:26px;}
+
+.contact-btn__label{font-size:19px;font-weight:600;letter-spacing:-.01em;}
+
+.contact-btn__count{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  min-width:22px;
+  height:22px;
+  padding:0 7px;
+  border-radius:var(--radius-pill);
+  background:var(--accent-fg);
+  color:var(--accent);
+  font-size:12px;
+  font-weight:700;
+}
+
+/* the presence dot is the whole promise of "live": a real person, right now */
+.chat__presence{
+  position:absolute;
+  right:0;
+  bottom:0;
+  width:11px;
+  height:11px;
+  border:2px solid var(--card);
+  border-radius:var(--radius-pill);
+  background:var(--success);
+}
+
+/* --- the conversation --- */
+
+.chat{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+
+.chat__head{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  flex:none;
+  padding:var(--space-3) var(--space-4);
+  border-bottom:1px solid var(--border);
+  background:var(--card);
+}
+
+.chat__back{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:32px;
+  height:32px;
+  margin-left:calc(var(--space-2) * -1);
+  border-radius:var(--radius-pill);
+  color:var(--text);
+}
+
+.chat__back svg{width:20px;height:20px;}
+.chat__back:active{background:var(--card-hover);}
+
+.chat__avatar{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:36px;
+  height:36px;
+  border-radius:var(--radius-pill);
+  overflow:hidden;
+  background:var(--accent-weak);
+  color:var(--accent);
+}
+
+/* Same-origin SVG, generated per agent (or the bot) — this is the one face
+   that proves a real person picked the chat up. */
+.chat__avatar-img{
+  display:block;
+  width:100%;
+  height:100%;
+  border-radius:inherit;
+  object-fit:cover;
+}
+
+.chat__who{display:flex;flex-direction:column;min-width:0;}
+.chat__name{font-size:15px;font-weight:600;}
+.chat__role{color:var(--text-secondary);font-size:12px;}
+.chat__role--typing{color:var(--success-ink);}
+
+.chat__thread{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior-y:contain;
+  padding:var(--space-4);
+}
+
+.chat__day{
+  margin:var(--space-3) 0;
+  color:var(--text-secondary);
+  font-size:11px;
+  text-align:center;
+  letter-spacing:.04em;
+}
+
+.chat__row{display:flex;align-items:flex-end;gap:var(--space-2);margin-bottom:var(--space-2);}
+.chat__row--lead{justify-content:flex-end;}
+.chat__row--agent{justify-content:flex-start;}
+
+/* The face beside an agent's bubble — a human handoff mid-chat reads as a
+   different one of these appearing, with no label needed. The lead's own
+   line never carries one (the JS drops the placeholder for it). */
+.chat__row-avatar{
+  flex:none;
+  width:24px;
+  height:24px;
+  border-radius:var(--radius-pill);
+  background:var(--accent-weak);
+  object-fit:cover;
+}
+
+/* A handoff note ("You're now chatting with Ana.") — centred and quiet,
+   never a bubble, so it reads like a system line rather than something
+   either side said. */
+.chat__row--system{justify-content:center;}
+
+.chat__system{
+  display:inline-block;
+  max-width:85%;
+  padding:6px var(--space-3);
+  border-radius:var(--radius-pill);
+  background:var(--card-hover);
+  color:var(--text-secondary);
+  font-size:12px;
+  line-height:1.4;
+  text-align:center;
+}
+
+.chat__bubble{
+  max-width:78%;
+  padding:10px var(--space-3) 6px;
+  border-radius:var(--radius);
+  background:var(--card);
+  border:1px solid var(--border);
+}
+
+.chat__row--lead .chat__bubble{
+  border-color:transparent;
+  background:var(--accent);
+  color:var(--accent-fg);
+  border-bottom-right-radius:var(--space-1);
+}
+
+.chat__row--agent .chat__bubble{border-bottom-left-radius:var(--space-1);}
+
+.chat__text{font-size:14px;line-height:1.5;white-space:pre-wrap;word-break:break-word;}
+
+.chat__time{
+  display:block;
+  margin-top:2px;
+  color:var(--text-secondary);
+  font-size:10px;
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
+.chat__row--lead .chat__time{color:rgba(255,255,255,.75);}
+
+/* three dots, one animation, no library */
+.chat__bubble--typing{display:flex;align-items:center;gap:4px;padding:12px var(--space-3);}
+
+.chat__bubble--typing span{
+  width:6px;
+  height:6px;
+  border-radius:var(--radius-pill);
+  background:var(--text-secondary);
+  animation:chat-typing 1.2s infinite ease-in-out;
+}
+
+.chat__bubble--typing span:nth-child(2){animation-delay:.15s;}
+.chat__bubble--typing span:nth-child(3){animation-delay:.3s;}
+
+@keyframes chat-typing{
+  0%,60%,100%{opacity:.3;transform:translateY(0);}
+  30%{opacity:1;transform:translateY(-3px);}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .chat__bubble--typing span{animation:none;opacity:.5;}
+}
+
+.chat__composer{
+  display:flex;
+  align-items:flex-end;
+  gap:var(--space-2);
+  flex:none;
+  padding:var(--space-3) var(--space-4) var(--space-2);
+  border-top:1px solid var(--border);
+  background:var(--card);
+}
+
+.chat__input{
+  flex:1 1 auto;
+  max-height:120px;
+  min-height:40px;
+  padding:10px var(--space-3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:14px;
+  line-height:1.4;
+  resize:none;
+  overflow-y:auto;
+  scrollbar-width:none;               /* the box grows itself; no chrome inside it */
+}
+
+.chat__input::-webkit-scrollbar{display:none;}
+
+.chat__input:focus{border-color:var(--accent);outline:none;}
+.chat__input::placeholder{color:var(--text-secondary);}
+
+.chat__send{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:var(--radius-pill);
+  background:var(--accent);
+  color:var(--accent-fg);
+  cursor:pointer;
+  transition:opacity var(--transition);
+}
+
+.chat__send svg{width:18px;height:18px;}
+.chat__send:disabled{opacity:.4;cursor:default;}
+
+.chat__hint{
+  flex:none;
+  padding:0 var(--space-4) var(--space-3);
+  background:var(--card);
+  color:var(--text-secondary);
+  font-size:11px;
+}
+
+/* quick-reply chips: real ways to start the conversation, before the lead types */
+.chat__suggest{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--space-2);
+  flex:none;
+  padding:var(--space-3) var(--space-4) var(--space-1);
+  border-top:1px solid var(--border);
+  background:var(--card);
+}
+
+.chat__suggest-chip{
+  padding:8px var(--space-3);
+  border:1px solid var(--border);
+  border-radius:var(--radius-pill);
+  background:var(--bg);
+  color:var(--text);
+  font-size:12px;
+  font-weight:500;
+  line-height:1.2;
+  text-align:left;
+  transition:border-color var(--transition), background var(--transition);
+}
+
+.chat__suggest-chip:active{background:var(--card-hover);border-color:var(--text-secondary);}
+
+/* ============================================================
+   CARDS — the card face and its manager.
+
+   The face is the SAME skeuomorphic exception the balance card is
+   (CLAUDE.md): a real piece of plastic, so it is allowed a glare, a
+   texture and a coloured shadow. Its colour arrives as --surface from
+   config/cards.php, so a new design never needs a new rule here.
+   Everything around it (swatches, switches, rows) stays flat.
+   ============================================================ */
+
+.card-stage{position:relative;transition:filter var(--transition);}
+.card-stage--frozen{filter:saturate(.35);}
+
+/* ============================================================
+   CARD GATE — the Cards screen before the account review has started. The card
+   sits behind a darker veil that catches every click; a big lock and a single
+   button point at verification. The tabbar (z 20) stays above the veil, so the
+   lead is sealed out of the designer, not trapped in the app.
+   ============================================================ */
+
+.card-gate{position:relative;}
+
+.card-gate__veil{
+  position:absolute;
+  inset:0;
+  z-index:5;                              /* below the tabbar (z 20) */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:var(--space-6) var(--space-5);
+  background:rgba(12,14,26,.66);          /* darker than a sheet scrim */
+  -webkit-backdrop-filter:blur(3px);
+  backdrop-filter:blur(3px);
+}
+
+.card-gate__panel{
+  width:100%;
+  max-width:320px;
+  padding:var(--space-6) var(--space-5) var(--space-5);
+  text-align:center;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-soft);
+}
+
+.card-gate__badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:72px;
+  height:72px;
+  margin-bottom:var(--space-4);
+  border-radius:22px;
+  background:var(--accent-weak);
+  color:var(--accent);
+}
+
+.card-gate__badge svg{width:34px;height:34px;stroke-width:1.75;}
+
+.card-gate__title{font-size:18px;font-weight:700;letter-spacing:-.01em;}
+
+.card-gate__text{
+  max-width:34ch;
+  margin:var(--space-2) auto var(--space-5);
+  color:var(--text-secondary);
+  font-size:13px;
+  line-height:1.55;
+}
+
+.card-face{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  aspect-ratio:1.586/1;                /* ISO/IEC 7810 ID-1 — a real card */
+  padding:18px 20px 16px;
+  overflow:hidden;
+  border-radius:20px;
+  background:var(--surface);
+  color:#FFFFFF;
+  box-shadow:0 20px 40px rgba(16,18,20,.28),inset 0 0 10px rgba(0,0,0,.50);
+}
+
+/* --- decorative layers --- */
+
+.card-face__glare,
+.card-face__texture{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  border-radius:20px;
+  pointer-events:none;
+}
+
+.card-face__glare{
+  background:linear-gradient(125deg,
+    rgba(255,255,255,.22) 0%,
+    rgba(255,255,255,.04) 30%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255,255,255,.08) 80%,
+    rgba(255,255,255,.16) 100%);
+}
+
+.card-face__glow{
+  position:absolute;
+  top:-80%;
+  right:-30%;
+  width:120%;
+  height:180%;
+  z-index:0;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 70% 30%,var(--glow) 0%,transparent 60%);
+}
+
+/* --- textures: one CSS layer each, no image files --- */
+
+/* fractal noise as a data URI: no request, no build step */
+.card-face--matte .card-face__texture{
+  opacity:.22;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.card-face--matte .card-face__glare{opacity:.45;}
+
+/* brushed metal: fine horizontal grain */
+.card-face--brushed .card-face__texture{
+  opacity:.5;
+  background-image:repeating-linear-gradient(0deg,
+    rgba(255,255,255,.06) 0px,
+    rgba(255,255,255,.06) 1px,
+    rgba(0,0,0,.06) 1px,
+    rgba(0,0,0,.06) 2px);
+}
+
+/* carbon fibre: two diagonal weaves crossing */
+.card-face--carbon .card-face__texture{
+  opacity:.55;
+  background-image:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 2px,transparent 2px 6px),
+    repeating-linear-gradient(-45deg,rgba(0,0,0,.20) 0 2px,transparent 2px 6px);
+}
+
+/* gloss: the laminate reads stronger and the grain almost disappears */
+.card-face--gloss .card-face__texture{
+  opacity:.12;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.card-face--gloss .card-face__glare{opacity:1;}
+
+/* holographic: an iridescent sweep over the surface colour */
+.card-face--holo .card-face__texture{
+  opacity:.35;
+  mix-blend-mode:color-dodge;
+  background-image:linear-gradient(115deg,
+    rgba(255,0,128,.28) 0%,
+    rgba(0,208,255,.24) 25%,
+    rgba(120,255,180,.20) 45%,
+    rgba(255,220,0,.24) 65%,
+    rgba(180,0,255,.28) 100%);
+}
+
+/* --- engraving --- */
+
+.card-face__top,
+.card-face__engraving,
+.card-face__chips{position:relative;z-index:1;}
+
+.card-face__top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:var(--space-3);
+}
+
+.card-face__brand{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.4px;
+}
+
+.card-face__kind{
+  color:rgba(255,255,255,.7);
+  font-size:11px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.card-face__chips{
+  position:absolute;
+  top:50%;
+  right:20px;
+  display:flex;
+  align-items:center;
+  gap:var(--space-2);
+  transform:translateY(-50%);
+}
+
+.card-face__contactless{opacity:.85;}
+.card-face__chip{filter:drop-shadow(0 1px 1px rgba(0,0,0,.25));}
+
+.card-face__pan{
+  margin-bottom:10px;
+  font-family:var(--font-mono);
+  font-size:16px;
+  letter-spacing:2.5px;
+  white-space:nowrap;
+}
+
+.card-face__row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:var(--space-3);
+}
+
+.card-face__holder{
+  overflow:hidden;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:1.2px;
+  text-overflow:ellipsis;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+.card-face__expiry{
+  flex:none;
+  font-family:var(--font-mono);
+  font-size:13px;
+  letter-spacing:.5px;
+}
+
+.card-face__expiry-label{
+  display:block;
+  color:rgba(255,255,255,.6);
+  font-family:var(--font);
+  font-size:8px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.card-face__status{
+  display:flex;
+  align-items:center;
+  gap:var(--space-2);
+  margin-top:10px;
+  color:rgba(255,255,255,.8);
+  font-size:12px;
+}
+
+.card-face__dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:rgba(255,255,255,.4);
+}
+
+/* frozen: the plastic is still there, it just stops being usable */
+.card-face--frozen::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  border-radius:20px;
+  background:rgba(16,18,20,.45);
+}
+
+.card-face__frozen{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.card-face__frozen-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--space-2);
+  padding:8px 14px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.14);
+  color:#FFFFFF;
+  font-size:13px;
+  font-weight:600;
+  backdrop-filter:blur(4px);
+}
+
+.card-face__frozen-badge svg{width:16px;height:16px;}
+
+/* --- design swatches --- */
+
+.swatches{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:var(--space-3);
+}
+
+.swatch{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:var(--space-2);
+  padding:var(--space-3) var(--space-2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+  cursor:pointer;
+  transition:border-color var(--transition), background var(--transition);
+}
+
+.swatch__chip{
+  width:100%;
+  height:34px;
+  border-radius:var(--radius-sm);
+  background:var(--surface);
+  box-shadow:inset 0 0 6px rgba(0,0,0,.35);
+}
+
+/* the swatch previews the finish, not only the colour */
+.swatch__chip--brushed{
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,rgba(0,0,0,.08) 1px 2px);
+}
+
+.swatch__chip--carbon{
+  background-image:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.08) 0 2px,transparent 2px 5px),
+    repeating-linear-gradient(-45deg,rgba(0,0,0,.22) 0 2px,transparent 2px 5px);
+}
+
+.swatch__chip--gloss{
+  background-image:linear-gradient(125deg,rgba(255,255,255,.28) 0%,transparent 45%,rgba(255,255,255,.14) 100%);
+}
+
+.swatch__chip--holo{
+  background-image:linear-gradient(115deg,rgba(255,0,128,.35),rgba(0,208,255,.3),rgba(255,220,0,.3),rgba(180,0,255,.35));
+}
+
+.swatch__name{
+  color:var(--text-secondary);
+  font-size:12px;
+  font-weight:600;
+}
+
+.swatch--on{border-color:var(--text);background:var(--card-hover);}
+.swatch--on .swatch__name{color:var(--text);}
+
+.swatches__blurb{
+  margin-top:var(--space-3);
+  color:var(--text-secondary);
+  font-size:13px;
+}
+
+/* --- a list of mutually exclusive choices (card type, limit) --- */
+
+.choice-list{display:flex;flex-direction:column;gap:var(--space-2);}
+
+.choice{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  width:100%;
+  padding:var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+  text-align:left;
+  cursor:pointer;
+  transition:border-color var(--transition), background var(--transition);
+}
+
+.choice__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  flex:none;
+  border-radius:var(--radius-sm);
+  background:var(--card-hover);
+  color:var(--text);
+}
+
+.choice__icon svg{width:20px;height:20px;}
+
+.choice__body{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
+.choice__title{font-size:15px;font-weight:600;}
+.choice__text{color:var(--text-secondary);font-size:13px;}
+
+.choice__meta{
+  flex:none;
+  color:var(--text-secondary);
+  font-size:12px;
+  text-align:right;
+}
+
+.choice--on{border-color:var(--text);background:var(--card-hover);}
+.choice--on .choice__icon{background:var(--accent-weak);color:var(--accent);}
+
+/* --- the four quick card actions --- */
+
+.card-actions{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:var(--space-2);
+}
+
+.card-action{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:var(--space-2);
+  padding:var(--space-3) var(--space-1);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+  cursor:pointer;
+  transition:border-color var(--transition), background var(--transition);
+}
+
+.card-action__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--card-hover);
+  color:var(--text);
+}
+
+.card-action__icon svg{width:20px;height:20px;}
+.card-action__label{font-size:12px;font-weight:600;}
+.card-action:active{background:var(--card-hover);}
+
+/* the frozen state is the one action that reports back */
+.card-action--on .card-action__icon{background:var(--accent-weak);color:var(--accent);}
+.card-action--on .card-action__label{color:var(--accent);}
+
+/* --- switch rows --- */
+
+.switch-list{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+  overflow:hidden;
+}
+
+.switch-row{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  padding:var(--space-4);
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+}
+
+.switch-row:last-child{border-bottom:none;}
+
+.switch-row__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  flex:none;
+  border-radius:var(--radius-sm);
+  background:var(--card-hover);
+  color:var(--text);
+}
+
+.switch-row__icon svg{width:18px;height:18px;}
+
+.switch-row__body{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
+.switch-row__title{font-size:15px;font-weight:600;}
+.switch-row__text{color:var(--text-secondary);font-size:13px;}
+
+.switch{position:relative;flex:none;}
+
+.switch__input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  margin:0;
+  opacity:0;
+  cursor:pointer;
+}
+
+.switch__track{
+  display:block;
+  width:44px;
+  height:26px;
+  padding:3px;
+  border-radius:var(--radius-pill);
+  background:var(--border);
+  transition:background var(--transition);
+}
+
+.switch__thumb{
+  display:block;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:var(--card);
+  box-shadow:var(--shadow-soft);
+  transition:transform var(--transition);
+}
+
+.switch--on .switch__track{background:var(--accent);}
+.switch--on .switch__thumb{transform:translateX(18px);}
+
+@media (prefers-reduced-motion:reduce){
+  .switch__track,.switch__thumb{transition:none;}
+}
+
+/* --- tappable list rows (security section) --- */
+
+.list__row--tap{
+  width:100%;
+  border:none;
+  background:none;
+  text-align:left;
+  cursor:pointer;
+}
+
+.list__row--tap svg{color:var(--text-secondary);}
+
+/* the row is built from spans (a button cannot hold <p>), so the body has to
+   stack them itself */
+.list__row--tap .list__body{display:flex;flex-direction:column;}
+.list__row--tap .list__icon svg{color:var(--text);}
+
+/* --- key/value rows inside a sheet --- */
+
+.detail-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-4);
+  padding:var(--space-3) 0;
+  border-bottom:1px solid var(--border);
+}
+
+.detail-row:last-of-type{border-bottom:none;}
+.detail-row__label{color:var(--text-secondary);font-size:14px;}
+.detail-row__value{font-size:15px;font-weight:600;}
+.detail-row__value--mono{font-family:var(--font-mono);letter-spacing:1px;}
+
+.sheet__lead{color:var(--text-secondary);font-size:14px;}
+
+.form__note{
+  color:var(--text-secondary);
+  font-size:13px;
+}
+
+.field__input--pin{
+  font-family:var(--font-mono);
+  letter-spacing:8px;
+  text-align:center;
+}
+
+/* ============================================================
+   SUPPORT PIN — the floating shortcut back into the chat.
+
+   Anchored to the phone frame (.app-shell is the positioning
+   context), sitting ~3cm above the tab bar and ~0.5cm off the
+   right edge, the way a support bubble sits on a real site.
+   ============================================================ */
+
+.support-pin{
+  position:absolute;
+  right:19px;                                   /* ~0.5cm */
+  bottom:calc(var(--bottom-nav-h) + 57px + var(--safe-bottom));  /* ~1.5cm above the tabbar */
+  z-index:30;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:56px;
+  height:56px;
+  border-radius:var(--radius-pill);
+  background:var(--accent);
+  color:var(--accent-fg);
+  /* neutral lift, not a coloured glow: the pin floats over the screen, it does
+     not advertise itself */
+  box-shadow:0 2px 4px rgba(16,18,20,.10),0 8px 20px rgba(16,18,20,.16);
+  cursor:pointer;
+  transition:transform var(--transition), background var(--transition);
+}
+
+.support-pin:active{background:var(--accent-hover);transform:scale(.94);}
+
+.support-pin__icon{display:flex;align-items:center;justify-content:center;}
+.support-pin__icon svg{width:26px;height:26px;}
+
+/* unread replies waiting inside the room */
+.support-pin__count{
+  position:absolute;
+  top:-2px;
+  right:-2px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:22px;
+  height:22px;
+  padding:0 6px;
+  border:2px solid var(--bg);
+  border-radius:var(--radius-pill);
+  background:var(--text);
+  color:#FFFFFF;
+  font-size:11px;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .support-pin{animation:pinIn .3s ease both;}
+}
+
+@keyframes pinIn{
+  from{opacity:0;transform:scale(.8);}
+  to{opacity:1;transform:scale(1);}
+}
+
+/* ---------- notification row (the bell's sheet) ---------- */
+
+.notify-row{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  padding:var(--space-3);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+}
+
+.notify-row:active{background:var(--card-hover);}
+
+.notify-row__icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  flex:none;
+  border-radius:var(--radius-pill);
+  background:var(--accent-weak);
+  color:var(--accent);
+}
+
+.notify-row__icon svg{width:20px;height:20px;}
+.notify-row__body{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
+.notify-row__title{font-size:15px;font-weight:600;}
+.notify-row__text{color:var(--text-secondary);font-size:13px;}
+.notify-row svg{color:var(--text-secondary);}
